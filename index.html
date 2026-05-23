@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards Anki - 50 Palabras Clave del Inglés</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            gap: 15px;
+        }
+
+        .stat-box {
+            flex: 1;
+            background: #f5f7fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+            text-transform: uppercase;
+        }
+
+        .card-container {
+            perspective: 1000px;
+            margin-bottom: 30px;
+            min-height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            width: 100%;
+            height: 300px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 30px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transform-style: preserve-3d;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            backface-visibility: hidden;
+            width: 100%;
+        }
+
+        .card-front {
+            transform: rotateY(0deg);
+        }
+
+        .card.flipped .card-front {
+            display: none;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            display: none;
+        }
+
+        .card.flipped .card-back {
+            display: block;
+        }
+
+        .card-word {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .card-category {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .card-hint {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .card-translation {
+            font-size: 18px;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .card-example {
+            font-size: 14px;
+            color: #777;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .card-pronunciation {
+            font-size: 14px;
+            color: #999;
+            background: #f5f7fa;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .click-hint {
+            font-size: 12px;
+            color: #bbb;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-again {
+            background: #ff6b6b;
+            color: white;
+            flex: 1;
+        }
+
+        .btn-again:hover {
+            background: #ee5a52;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-hard {
+            background: #ffa94d;
+            color: white;
+            flex: 1;
+        }
+
+        .btn-hard:hover {
+            background: #ff9433;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 164, 77, 0.3);
+        }
+
+        .btn-good {
+            background: #51cf66;
+            color: white;
+            flex: 1;
+        }
+
+        .btn-good:hover {
+            background: #40c057;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(81, 207, 102, 0.3);
+        }
+
+        .btn-easy {
+            background: #667eea;
+            color: white;
+            flex: 1;
+        }
+
+        .btn-easy:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-reset {
+            background: #e0e0e0;
+            color: #333;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-reset:hover {
+            background: #d0d0d0;
+        }
+
+        .navigation {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn-nav {
+            flex: 1;
+            padding: 10px;
+            background: #f5f7fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .btn-nav:hover {
+            background: #e0e0e0;
+            border-color: #667eea;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalSlide 0.4s ease-out;
+        }
+
+        @keyframes modalSlide {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .modal-message {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .modal-stats {
+            background: #f5f7fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .modal-stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .modal-stat:last-child {
+            margin-bottom: 0;
+        }
+
+        .modal-label {
+            color: #999;
+        }
+
+        .modal-value {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .btn-modal {
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-modal:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .empty-state-text {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .card {
+                height: 250px;
+                padding: 20px;
+            }
+
+            .card-word {
+                font-size: 24px;
+            }
+
+            .card-hint {
+                font-size: 14px;
+            }
+
+            .stats {
+                flex-direction: row;
+                gap: 10px;
+            }
+
+            .stat-box {
+                padding: 12px 10px;
+            }
+
+            .stat-value {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Flashcards Anki</h1>
+            <p class="subtitle">50 Palabras Clave del Inglés • Máxima Frecuencia</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p id="progressText" style="color: #999; font-size: 12px; margin-top: 5px;">Tarjeta 1 de 50</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-value" id="correctCount">0</div>
+                <div class="stat-label">Correctas</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="totalCards">50</div>
+                <div class="stat-label">Total</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="accuracyPercent">0%</div>
+                <div class="stat-label">Precisión</div>
+            </div>
+        </div>
+
+        <div class="card-container" id="cardContainer">
+            <div class="card" id="card">
+                <div class="card-face card-front">
+                    <div class="card-category" id="cardCategory"></div>
+                    <div class="card-word" id="cardWord"></div>
+                    <div class="card-hint" id="cardHint"></div>
+                    <div class="click-hint">Haz clic para voltear</div>
+                </div>
+                <div class="card-face card-back">
+                    <div class="card-translation" id="cardTranslation"></div>
+                    <div class="card-example" id="cardExample"></div>
+                    <div class="card-pronunciation" id="cardPronunciation"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <button class="btn-nav" id="prevBtn" onclick="previousCard()">← Anterior</button>
+            <button class="btn-nav" id="nextBtn" onclick="nextCard()">Siguiente →</button>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-again" onclick="markCard('again')">Otra Vez</button>
+            <button class="btn btn-hard" onclick="markCard('hard')">Difícil</button>
+            <button class="btn btn-good" onclick="markCard('good')">Bien</button>
+            <button class="btn btn-easy" onclick="markCard('easy')">Fácil</button>
+        </div>
+
+        <button class="btn btn-reset" onclick="resetAll()">↻ Reiniciar desde el Inicio</button>
+    </div>
+
+    <div class="modal" id="completionModal">
+        <div class="modal-content">
+            <div class="modal-title">🎉 ¡Sesión Completada!</div>
+            <div class="modal-message">Excelente trabajo. Aquí están tus estadísticas:</div>
+            <div class="modal-stats">
+                <div class="modal-stat">
+                    <span class="modal-label">Tarjetas Correctas:</span>
+                    <span class="modal-value" id="modalCorrect">0</span>
+                </div>
+                <div class="modal-stat">
+                    <span class="modal-label">Precisión Total:</span>
+                    <span class="modal-value" id="modalAccuracy">0%</span>
+                </div>
+                <div class="modal-stat">
+                    <span class="modal-label">Tiempo Estimado:</span>
+                    <span class="modal-value" id="modalTime">-</span>
+                </div>
+            </div>
+            <button class="btn-modal" onclick="resetAll()">Volver a Estudiar</button>
+        </div>
+    </div>
+
+    <script>
+        // Base de datos de flashcards
+        const flashcards = [
+            {
+                word: "the",
+                category: "Artículo Determinado",
+                hint: "**The** cat is sleeping. (El artículo más usado en inglés, marca especificidad)",
+                translation: "el, la, los, las",
+                example: "El gato está durmiendo.",
+                pronunciation: "/ðə/ o /ðiː/"
+            },
+            {
+                word: "and",
+                category: "Conjunción",
+                hint: "She likes **and** watches movies. (Conecta dos ideas; casi tan frecuente como 'the')",
+                translation: "y",
+                example: "Ella le gusta y mira películas.",
+                pronunciation: "/ænd/"
+            },
+            {
+                word: "a",
+                category: "Artículo Indefinido",
+                hint: "I have **a** dog at home. (Introduce algo nuevo o singular)",
+                translation: "un, una",
+                example: "Tengo un perro en casa.",
+                pronunciation: "/ə/ o /eɪ/"
+            },
+            {
+                word: "to",
+                category: "Preposición/Infinitivo",
+                hint: "I want **to** learn English. (Precede verbos en infinitivo; muy frecuente)",
+                translation: "a, para",
+                example: "Quiero aprender inglés.",
+                pronunciation: "/tu/ o /tə/"
+            },
+            {
+                word: "of",
+                category: "Preposición de Posesión",
+                hint: "The color **of** the car is red. (Expresa posesión o pertenencia)",
+                translation: "de",
+                example: "El color del coche es rojo.",
+                pronunciation: "/əv/ o /ʌv/"
+            },
+            {
+                word: "in",
+                category: "Preposición de Lugar/Tiempo",
+                hint: "I live **in** New York. (Dentro de, contenido; uso frecuente)",
+                translation: "en, dentro de",
+                example: "Vivo en Nueva York.",
+                pronunciation: "/ɪn/"
+            },
+            {
+                word: "that",
+                category: "Pronombre Demostrativo",
+                hint: "**That** book is interesting. (Señala algo lejano o ya mencionado)",
+                translation: "ese, esa, aquello",
+                example: "Ese libro es interesante.",
+                pronunciation: "/ðæt/"
+            },
+            {
+                word: "is",
+                category: "Verbo To Be - Presente",
+                hint: "She **is** a teacher. (Tercera persona singular; estado/identidad)",
+                translation: "es, está",
+                example: "Ella es una maestra.",
+                pronunciation: "/ɪz/"
+            },
+            {
+                word: "you",
+                category: "Pronombre Personal",
+                hint: "Can **you** help me? (Dirigirse al oyente; muy usado)",
+                translation: "tú, ustedes, te, os",
+                example: "¿Puedes ayudarme?",
+                pronunciation: "/juː/"
+            },
+            {
+                word: "for",
+                category: "Preposición de Propósito/Duración",
+                hint: "This gift is **for** you. (Indica propósito, destinatario, duración)",
+                translation: "para, por",
+                example: "Este regalo es para ti.",
+                pronunciation: "/fɔr/ o /fər/"
+            },
+            {
+                word: "it",
+                category: "Pronombre Neutro",
+                hint: "**It** is cold today. (Cosa, idea, situación neutra)",
+                translation: "eso, lo, el",
+                example: "Hace frío hoy.",
+                pronunciation: "/ɪt/"
+            },
+            {
+                word: "was",
+                category: "Verbo To Be - Pasado",
+                hint: "He **was** happy yesterday. (Pasado simple, tercera persona)",
+                translation: "era, estaba",
+                example: "Él estaba feliz ayer.",
+                pronunciation: "/wəz/ o /wɑːz/"
+            },
+            {
+                word: "he",
+                category: "Pronombre Masculino",
+                hint: "**He** plays football. (Masculino singular; sujeto de oración)",
+                translation: "él",
+                example: "Él juega fútbol.",
+                pronunciation: "/hiː/"
+            },
+            {
+                word: "have",
+                category: "Verbo Auxiliar/Principal",
+                hint: "I **have** two brothers. (Posesión, tiempo perfecto)",
+                translation: "tengo, he",
+                example: "Tengo dos hermanos.",
+                pronunciation: "/hæv/ o /həv/"
+            },
+            {
+                word: "with",
+                category: "Preposición de Compañía",
+                hint: "I went **with** my friend. (Acompañamiento, instrumento)",
+                translation: "con",
+                example: "Fui con mi amigo.",
+                pronunciation: "/wɪð/ o /wɪθ/"
+            },
+            {
+                word: "be",
+                category: "Verbo To Be - Infinitivo",
+                hint: "To **be** or not **to be**. (Existencia, estado; fundamental)",
+                translation: "ser, estar",
+                example: "Ser o no ser.",
+                pronunciation: "/biː/"
+            },
+            {
+                word: "this",
+                category: "Pronombre Demostrativo Cercano",
+                hint: "**This** is my house. (Cercano, presente; mayor énfasis que 'that')",
+                translation: "este, esto",
+                example: "Esta es mi casa.",
+                pronunciation: "/ðɪs/"
+            },
+            {
+                word: "but",
+                category: "Conjunción de Contraste",
+                hint: "I like pizza, **but** I don't like olives. (Opone ideas; contraste)",
+                translation: "pero, sino",
+                example: "Me gusta la pizza, pero no me gustan las aceitunas.",
+                pronunciation: "/bət/ o /bʌt/"
+            },
+            {
+                word: "his",
+                category: "Pronombre Posesivo Masculino",
+                hint: "This is **his** book. (Pertenencia masculina)",
+                translation: "su (de él)",
+                example: "Este es su libro.",
+                pronunciation: "/hɪz/"
+            },
+            {
+                word: "by",
+                category: "Preposición Multifunción",
+                hint: "I walk **by** the river. (Cerca de, mediante, agente pasivo)",
+                translation: "por, cerca de",
+                example: "Camino cerca del río.",
+                pronunciation: "/baɪ/"
+            },
+            {
+                word: "from",
+                category: "Preposición de Origen",
+                hint: "I come **from** Spain. (Origen, procedencia; muy común)",
+                translation: "de, desde",
+                example: "Vengo de España.",
+                pronunciation: "/frəm/ o /frɑːm/"
+            },
+            {
+                word: "they",
+                category: "Pronombre Plural",
+                hint: "**They** are students. (Tercera persona plural; neutro)",
+                translation: "ellos, ellas",
+                example: "Son estudiantes.",
+                pronunciation: "/ðeɪ/"
+            },
+            {
+                word: "we",
+                category: "Pronombre Plural Inclusivo",
+                hint: "**We** like ice cream. (Primera persona plural; incluye oyente)",
+                translation: "nosotros, nosotras",
+                example: "Nos gusta el helado.",
+                pronunciation: "/wiː/"
+            },
+            {
+                word: "can",
+                category: "Verbo Modal de Capacidad",
+                hint: "**Can** you swim? (Habilidad, posibilidad, permiso)",
+                translation: "poder, puedo",
+                example: "¿Puedes nadar?",
+                pronunciation: "/kæn/ o /kən/"
+            },
+            {
+                word: "all",
+                category: "Cuantificador Universal",
+                hint: "**All** students passed the exam. (Totalidad, completitud)",
+                translation: "todos, todas, todo",
+                example: "Todos los estudiantes aprobaron el examen.",
+                pronunciation: "/ɔːl/"
+            },
+            {
+                word: "would",
+                category: "Verbo Modal Condicional",
+                hint: "I **would** like coffee. (Condicional, cortesía; muy frecuente)",
+                translation: "querría, quisiera",
+                example: "Quisiera café.",
+                pronunciation: "/wʊd/ o /wəd/"
+            },
+            {
+                word: "there",
+                category: "Adverbio de Lugar",
+                hint: "**There** is a cat outside. (Existencia, ubicación; sujeto falso 'there is')",
+                translation: "hay, allí",
+                example: "Hay un gato afuera.",
+                pronunciation: "/ðɛr/"
+            },
+            {
+                word: "their",
+                category: "Pronombre Posesivo Plural",
+                hint: "**Their** house is big. (Pertenencia plural, neutro)",
+                translation: "su (de ellos/ellas)",
+                example: "Su casa es grande.",
+                pronunciation: "/ðɛr/"
+            },
+            {
+                word: "what",
+                category: "Pronombre Interrogativo",
+                hint: "**What** is your name? (Pregunta sobre cosa, objeto)",
+                translation: "qué",
+                example: "¿Cuál es tu nombre?",
+                pronunciation: "/wɑːt/ o /wɑt/"
+            },
+            {
+                word: "so",
+                category: "Adverbio de Grado/Conjunción",
+                hint: "The movie was **so** good! (Grado, intensidad, consecuencia)",
+                translation: "tan, tan...que",
+                example: "¡La película fue tan buena!",
+                pronunciation: "/soʊ/"
+            },
+            {
+                word: "up",
+                category: "Adverbio/Preposición de Dirección",
+                hint: "Stand **up** please. (Hacia arriba, incremento)",
+                translation: "arriba, de pie",
+                example: "Ponte de pie por favor.",
+                pronunciation: "/ʌp/"
+            },
+            {
+                word: "more",
+                category: "Cuantificador Comparativo",
+                hint: "I want **more** ice cream. (Mayor cantidad, comparación)",
+                translation: "más",
+                example: "Quiero más helado.",
+                pronunciation: "/mɔr/ o /mɔːr/"
+            },
+            {
+                word: "could",
+                category: "Verbo Modal Pasado",
+                hint: "**Could** you help me? (Pasado de 'can'; cortesía, posibilidad)",
+                translation: "podría, pude",
+                example: "¿Podrías ayudarme?",
+                pronunciation: "/kʊd/ o /kəd/"
+            },
+            {
+                word: "who",
+                category: "Pronombre Interrogativo Personal",
+                hint: "**Who** is your best friend? (Pregunta sobre persona)",
+                translation: "quién",
+                example: "¿Quién es tu mejor amigo?",
+                pronunciation: "/huː/"
+            },
+            {
+                word: "go",
+                category: "Verbo de Movimiento",
+                hint: "Let's **go** to the beach. (Movimiento, partida)",
+                translation: "ir, vamos",
+                example: "Vamos a la playa.",
+                pronunciation: "/ɡoʊ/"
+            },
+            {
+                word: "me",
+                category: "Pronombre Objeto Directo/Indirecto",
+                hint: "Can you help **me**? (Objeto, complemento; muy común)",
+                translation: "me, mí",
+                example: "¿Puedes ayudarme?",
+                pronunciation: "/miː/"
+            },
+            {
+                word: "as",
+                category: "Conjunción/Preposición Multifunción",
+                hint: "**As** you know, I am busy. (Como, en calidad de, mientras)",
+                translation: "como, mientras",
+                example: "Como sabes, estoy ocupado.",
+                pronunciation: "/æz/ o /əz/"
+            },
+            {
+                word: "get",
+                category: "Verbo Multifunción",
+                hint: "I want **to get** a new car. (Obtener, conseguir, llegar)",
+                translation: "conseguir, obtener, llegar",
+                example: "Quiero conseguir un coche nuevo.",
+                pronunciation: "/ɡɛt/"
+            },
+            {
+                word: "or",
+                category: "Conjunción Disyuntiva",
+                hint: "Do you want tea **or** coffee? (Alternancia, opción)",
+                translation: "o",
+                example: "¿Quieres té o café?",
+                pronunciation: "/ɔr/ o /ɚ/"
+            },
+            {
+                word: "know",
+                category: "Verbo de Conocimiento",
+                hint: "I **know** the answer. (Conocer, saber; información establecida)",
+                translation: "saber, conocer",
+                example: "Sé la respuesta.",
+                pronunciation: "/noʊ/"
+            },
+            {
+                word: "make",
+                category: "Verbo Multifunción",
+                hint: "I want **to make** a cake. (Crear, elaborar, hacer)",
+                translation: "hacer, preparar, elaborar",
+                example: "Quiero hacer un pastel.",
+                pronunciation: "/meɪk/"
+            },
+            {
+                word: "him",
+                category: "Pronombre Objeto Masculino",
+                hint: "I like **him** very much. (Objeto indirecto/directo masculino)",
+                translation: "lo, le",
+                example: "Me cae muy bien.",
+                pronunciation: "/hɪm/"
+            },
+            {
+                word: "see",
+                category: "Verbo de Percepción Visual",
+                hint: "Can you **see** the mountain? (Ver, observar; percepción)",
+                translation: "ver",
+                example: "¿Puedes ver la montaña?",
+                pronunciation: "/siː/"
+            },
+            {
+                word: "my",
+                category: "Pronombre Posesivo Primera Persona",
+                hint: "**My** name is John. (Pertenencia, primera persona)",
+                translation: "mi, mis",
+                example: "Mi nombre es John.",
+                pronunciation: "/maɪ/"
+            },
+            {
+                word: "how",
+                category: "Adverbio Interrogativo de Modo",
+                hint: "**How** are you today? (Manera, estado, grado)",
+                translation: "cómo",
+                example: "¿Cómo estás hoy?",
+                pronunciation: "/haʊ/"
+            },
+            {
+                word: "any",
+                category: "Cuantificador de Cantidad",
+                hint: "Do you have **any** books? (Cantidad indeterminada; negativa/interrogativa)",
+                translation: "algún, alguno, cualquier",
+                example: "¿Tienes algún libro?",
+                pronunciation: "/ɛni/"
+            },
+            {
+                word: "an",
+                category: "Artículo Indefinido Vocálico",
+                hint: "I eat **an** apple. (Singular, antes de vocales; variante de 'a')",
+                translation: "un, una (antes de vocales)",
+                example: "Como una manzana.",
+                pronunciation: "/ən/ o /æn/"
+            },
+            {
+                word: "some",
+                category: "Cuantificador Indefinido",
+                hint: "I have **some** money. (Cantidad indefinida, positiva; 'algún')",
+                translation: "algún, alguno, un poco de",
+                example: "Tengo algo de dinero.",
+                pronunciation: "/səm/ o /sʌm/"
+            },
+            {
+                word: "her",
+                category: "Pronombre Objeto Femenino",
+                hint: "I saw **her** yesterday. (Objeto indirecto/directo femenino)",
+                translation: "la, le",
+                example: "La vi ayer.",
+                pronunciation: "/hɜr/ o /ɚ/"
+            },
+            {
+                word: "our",
+                category: "Pronombre Posesivo Plural",
+                hint: "**Our** school is big. (Pertenencia primera persona plural)",
+                translation: "nuestro, nuestra",
+                example: "Nuestra escuela es grande.",
+                pronunciation: "/aʊr/ o /ɑr/"
+            },
+            {
+                word: "now",
+                category: "Adverbio de Tiempo Presente",
+                hint: "I am busy **now**. (Tiempo presente, actualidad, inmediatez)",
+                translation: "ahora",
+                example: "Estoy ocupado ahora.",
+                pronunciation: "/naʊ/"
+            }
+        ];
+
+        // Estado de la aplicación
+        let currentIndex = 0;
+        let correctCards = 0;
+        let reviewStats = {};
+
+        // Inicializar
+        function init() {
+            updateCard();
+            updateProgress();
+            updateStats();
+        }
+
+        // Actualizar tarjeta visible
+        function updateCard() {
+            const card = flashcards[currentIndex];
+            const cardElement = document.getElementById('card');
+            
+            // Limpiar clase de volteo
+            cardElement.classList.remove('flipped');
+            
+            // Actualizar contenido
+            document.getElementById('cardCategory').textContent = card.category;
+            document.getElementById('cardWord').textContent = card.word.toUpperCase();
+            document.getElementById('cardHint').innerHTML = card.hint.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            document.getElementById('cardTranslation').textContent = card.translation;
+            document.getElementById('cardExample').textContent = `"${card.example}"`;
+            document.getElementById('cardPronunciation').textContent = `Pronunciación: ${card.pronunciation}`;
+            
+            updateNavigation();
+        }
+
+        // Voltear tarjeta
+        document.getElementById('card').addEventListener('click', function() {
+            this.classList.toggle('flipped');
+        });
+
+        // Navegar tarjetas
+        function previousCard() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateCard();
+            }
+        }
+
+        function nextCard() {
+            if (currentIndex < flashcards.length - 1) {
+                currentIndex++;
+                updateCard();
+            }
+        }
+
+        // Marcar tarjeta
+        function markCard(difficulty) {
+            reviewStats[currentIndex] = difficulty;
+            
+            if (difficulty === 'good' || difficulty === 'easy') {
+                correctCards++;
+            }
+            
+            updateStats();
+            
+            if (currentIndex < flashcards.length - 1) {
+                nextCard();
+            } else {
+                showCompletionModal();
+            }
+        }
+
+        // Actualizar progreso
+        function updateProgress() {
+            const progress = ((currentIndex + 1) / flashcards.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `Tarjeta ${currentIndex + 1} de ${flashcards.length}`;
+        }
+
+        // Actualizar estadísticas
+        function updateStats() {
+            const accuracy = flashcards.length > 0 ? Math.round((correctCards / flashcards.length) * 100) : 0;
+            document.getElementById('correctCount').textContent = correctCards;
+            document.getElementById('accuracyPercent').textContent = accuracy + '%';
+            updateProgress();
+        }
+
+        // Actualizar navegación
+        function updateNavigation() {
+            document.getElementById('prevBtn').disabled = currentIndex === 0;
+            document.getElementById('nextBtn').disabled = currentIndex === flashcards.length - 1;
+        }
+
+        // Modal de finalización
+        function showCompletionModal() {
+            const accuracy = Math.round((correctCards / flashcards.length) * 100);
+            document.getElementById('modalCorrect').textContent = correctCards;
+            document.getElementById('modalAccuracy').textContent = accuracy + '%';
+            document.getElementById('completionModal').classList.add('active');
+        }
+
+        // Reiniciar
+        function resetAll() {
+            currentIndex = 0;
+            correctCards = 0;
+            reviewStats = {};
+            document.getElementById('completionModal').classList.remove('active');
+            updateCard();
+            updateStats();
+        }
+
+        // Iniciar aplicación
+        init();
+    </script>
+</body>
+</html>
