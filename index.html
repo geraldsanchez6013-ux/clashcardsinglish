@@ -3,995 +3,813 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flashcards Anki - 50 Palabras Clave del Inglés</title>
+    <title>🎓 Anki Ultra Premium</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Grotesk:wght@600;700&display=swap');
+
+        *{margin:0;padding:0;box-sizing:border-box}
+        
+        body{
+            font-family:'Inter',sans-serif;
+            background:linear-gradient(135deg,#0f0c29 0%,#302b63 50%,#24243e 100%);
+            min-height:100vh;
+            padding:20px;
+            overflow-x:hidden
         }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+        
+        .container{max-width:1600px;margin:0 auto}
+        
+        .header{
+            background:rgba(15,12,41,.85);
+            backdrop-filter:blur(10px);
+            border-radius:20px;
+            padding:30px;
+            margin-bottom:25px;
+            box-shadow:0 20px 60px rgba(0,212,255,.1);
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            border:1px solid rgba(0,212,255,.2)
         }
-
-        .container {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 800px;
-            width: 100%;
-            padding: 40px;
-            animation: slideIn 0.6s ease-out;
+        
+        .header h1{
+            color:#00d4ff;
+            font-size:32px;
+            font-family:'Space Grotesk',sans-serif;
+            font-weight:700;
+            letter-spacing:-1px
         }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        
+        .header-tabs{display:flex;gap:12px}
+        
+        .tab-btn{
+            padding:12px 24px;
+            background:rgba(48,43,99,.4);
+            border:2px solid rgba(0,212,255,.2);
+            border-radius:12px;
+            cursor:pointer;
+            font-weight:600;
+            font-size:13px;
+            transition:all .3s cubic-bezier(.4,0,.2,1);
+            color:#00d4ff;
+            text-transform:uppercase;
+            letter-spacing:.5px
         }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
+        
+        .tab-btn:hover{
+            transform:translateY(-2px);
+            box-shadow:0 8px 20px rgba(0,212,255,.2)
         }
-
-        h1 {
-            color: #667eea;
-            font-size: 28px;
-            margin-bottom: 10px;
+        
+        .tab-btn.active{
+            background:linear-gradient(135deg,#7b2cbf,#00d4ff);
+            color:white;
+            border-color:transparent;
+            box-shadow:0 10px 30px rgba(123,44,191,.4)
         }
-
-        .subtitle {
-            color: #999;
-            font-size: 14px;
-            margin-bottom: 20px;
+        
+        .stats-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+            gap:18px;
+            margin-bottom:25px
         }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #e0e0e0;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 10px;
+        
+        .stat-card{
+            background:rgba(48,43,99,.4);
+            backdrop-filter:blur(10px);
+            padding:24px;
+            border-radius:16px;
+            text-align:center;
+            box-shadow:0 10px 40px rgba(0,212,255,.1);
+            border:1px solid rgba(0,212,255,.2);
+            transition:all .4s cubic-bezier(.4,0,.2,1)
         }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            transition: width 0.3s ease;
+        
+        .stat-card:hover{
+            transform:translateY(-8px);
+            box-shadow:0 20px 60px rgba(123,44,191,.25)
         }
-
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 30px;
-            gap: 15px;
+        
+        .stat-value{
+            font-size:36px;
+            font-weight:700;
+            background:linear-gradient(135deg,#00d4ff,#7b2cbf);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            background-clip:text;
+            font-family:'Space Grotesk',sans-serif
         }
-
-        .stat-box {
-            flex: 1;
-            background: #f5f7fa;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            border-left: 4px solid #667eea;
+        
+        .stat-label{
+            font-size:11px;
+            color:#999;
+            margin-top:8px;
+            text-transform:uppercase;
+            letter-spacing:1px;
+            font-weight:600
         }
-
-        .stat-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #667eea;
+        
+        .main-layout{
+            display:grid;
+            grid-template-columns:320px 1fr;
+            gap:25px;
+            margin-bottom:25px
         }
-
-        .stat-label {
-            font-size: 12px;
-            color: #999;
-            margin-top: 5px;
-            text-transform: uppercase;
+        
+        .sidebar{
+            background:rgba(255,255,255,.95);
+            backdrop-filter:blur(10px);
+            border-radius:20px;
+            padding:25px;
+            box-shadow:0 10px 40px rgba(0,0,0,.1);
+            border:1px solid rgba(255,255,255,.5);
+            height:fit-content;
+            max-height:85vh;
+            overflow-y:auto
         }
-
-        .card-container {
-            perspective: 1000px;
-            margin-bottom: 30px;
-            min-height: 300px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        
+        .sidebar h3{
+            color:#333;
+            font-size:13px;
+            margin-bottom:15px;
+            text-transform:uppercase;
+            letter-spacing:1.2px;
+            font-weight:700;
+            color:#667eea
         }
-
-        .card {
-            width: 100%;
-            height: 300px;
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 30px;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            transform-style: preserve-3d;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        
+        .search-input{
+            width:100%;
+            padding:14px 16px;
+            border:2px solid #e8eef7;
+            border-radius:12px;
+            margin-bottom:20px;
+            font-size:14px;
+            transition:all .3s;
+            font-family:'Inter',sans-serif;
+            background:white
         }
-
-        .card.flipped {
-            transform: rotateY(180deg);
+        
+        .search-input:focus{
+            outline:0;
+            border-color:#667eea;
+            box-shadow:0 0 0 4px rgba(102,126,234,.1)
         }
-
-        .card-face {
-            backface-visibility: hidden;
-            width: 100%;
+        
+        .category-filters{
+            display:flex;
+            flex-direction:column;
+            gap:8px;
+            margin-bottom:20px;
+            max-height:220px;
+            overflow-y:auto
         }
-
-        .card-front {
-            transform: rotateY(0deg);
+        
+        .category-btn{
+            padding:10px 14px;
+            border:1.5px solid #e8eef7;
+            background:white;
+            border-radius:10px;
+            cursor:pointer;
+            font-size:12px;
+            transition:all .3s cubic-bezier(.4,0,.2,1);
+            text-align:left;
+            font-weight:500;
+            color:#666
         }
-
-        .card.flipped .card-front {
-            display: none;
+        
+        .category-btn:hover{
+            border-color:#667eea;
+            color:#667eea;
+            background:#f9fafd
         }
-
-        .card-back {
-            transform: rotateY(180deg);
-            display: none;
+        
+        .category-btn.active{
+            background:linear-gradient(135deg,#667eea,#764ba2);
+            color:white;
+            border-color:transparent;
+            box-shadow:0 4px 12px rgba(102,126,234,.3)
         }
-
-        .card.flipped .card-back {
-            display: block;
+        
+        .mode-buttons{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+        
+        .mode-btn{
+            padding:13px;
+            border:none;
+            border-radius:12px;
+            cursor:pointer;
+            font-weight:600;
+            font-size:12px;
+            transition:all .3s cubic-bezier(.4,0,.2,1);
+            text-transform:uppercase;
+            letter-spacing:.5px;
+            font-family:'Inter',sans-serif
         }
-
-        .card-word {
-            font-size: 32px;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 15px;
+        
+        .mode-btn.primary{
+            background:linear-gradient(135deg,#667eea,#764ba2);
+            color:white;
+            box-shadow:0 8px 25px rgba(102,126,234,.3)
         }
-
-        .card-category {
-            font-size: 12px;
-            color: #999;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-            letter-spacing: 1px;
+        
+        .mode-btn.primary:hover{
+            transform:translateY(-3px);
+            box-shadow:0 12px 35px rgba(102,126,234,.4)
         }
-
-        .card-hint {
-            font-size: 16px;
-            color: #555;
-            line-height: 1.6;
-            font-style: italic;
+        
+        .mode-btn.secondary{
+            background:#f5f7fa;
+            color:#667eea;
+            border:1.5px solid #e8eef7;
+            transition:all .3s
         }
-
-        .card-translation {
-            font-size: 18px;
-            color: #667eea;
-            font-weight: 600;
-            margin-bottom: 15px;
+        
+        .mode-btn.secondary:hover{
+            border-color:#667eea;
+            background:#f9fafd;
+            transform:translateY(-2px)
         }
-
-        .card-example {
-            font-size: 14px;
-            color: #777;
-            line-height: 1.6;
-            margin-bottom: 15px;
+        
+        .content{
+            background:rgba(255,255,255,.95);
+            backdrop-filter:blur(10px);
+            border-radius:20px;
+            padding:35px;
+            box-shadow:0 10px 40px rgba(0,0,0,.1);
+            border:1px solid rgba(255,255,255,.5)
         }
-
-        .card-pronunciation {
-            font-size: 14px;
-            color: #999;
-            background: #f5f7fa;
-            padding: 10px 15px;
-            border-radius: 6px;
-            margin-top: 15px;
-            font-family: 'Courier New', monospace;
+        
+        .tab-content{display:none}
+        .tab-content.active{display:block;animation:fadeIn .5s ease-in}
+        
+        @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        
+        .study-mode{display:flex;flex-direction:column;gap:25px}
+        
+        .progress-bar{
+            width:100%;
+            height:8px;
+            background:#e8eef7;
+            border-radius:10px;
+            overflow:hidden;
+            margin-bottom:20px
         }
-
-        .click-hint {
-            font-size: 12px;
-            color: #bbb;
-            margin-top: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        
+        .progress-fill{
+            height:100%;
+            background:linear-gradient(90deg,#667eea,#764ba2,#f093fb);
+            transition:width .4s cubic-bezier(.4,0,.2,1);
+            box-shadow:0 0 20px rgba(102,126,234,.4)
         }
-
-        .controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
+        
+        .flashcard{
+            background:linear-gradient(135deg,#667eea 0%,#764ba2 50%,#f093fb 100%);
+            color:white;
+            padding:60px 40px;
+            border-radius:24px;
+            min-height:420px;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            text-align:center;
+            cursor:pointer;
+            transition:all .5s cubic-bezier(.4,0,.2,1);
+            perspective:1000px;
+            box-shadow:0 25px 60px rgba(102,126,234,.3),inset 0 1px 0 rgba(255,255,255,.2);
+            border:1px solid rgba(255,255,255,.1);
+            position:relative;
+            overflow:hidden
         }
-
-        .btn {
-            flex: 1;
-            min-width: 100px;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        
+        .flashcard::before{
+            content:'';
+            position:absolute;
+            top:-50%;
+            right:-50%;
+            width:200%;
+            height:200%;
+            background:radial-gradient(circle,rgba(255,255,255,.1),transparent);
+            animation:shimmer 3s infinite
         }
-
-        .btn-again {
-            background: #ff6b6b;
-            color: white;
-            flex: 1;
+        
+        @keyframes shimmer{
+            0%{transform:translate(-100%,-100%)}
+            100%{transform:translate(100%,100%)}
         }
-
-        .btn-again:hover {
-            background: #ee5a52;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        
+        .flashcard:hover{
+            transform:translateY(-10px) scale(1.02);
+            box-shadow:0 35px 80px rgba(102,126,234,.4),inset 0 1px 0 rgba(255,255,255,.3)
         }
-
-        .btn-hard {
-            background: #ffa94d;
-            color: white;
-            flex: 1;
+        
+        .card-word{
+            font-size:64px;
+            font-weight:700;
+            letter-spacing:-2px;
+            margin-bottom:25px;
+            font-family:'Space Grotesk',sans-serif;
+            animation:slideUp .5s ease-out
         }
-
-        .btn-hard:hover {
-            background: #ff9433;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 164, 77, 0.3);
+        
+        @keyframes slideUp{
+            from{opacity:0;transform:translateY(30px)}
+            to{opacity:1;transform:translateY(0)}
         }
-
-        .btn-good {
-            background: #51cf66;
-            color: white;
-            flex: 1;
+        
+        .card-category{
+            font-size:12px;
+            opacity:.85;
+            text-transform:uppercase;
+            letter-spacing:1.5px;
+            margin-bottom:20px;
+            font-weight:600;
+            background:rgba(255,255,255,.15);
+            padding:8px 16px;
+            border-radius:8px;
+            display:inline-block;
+            backdrop-filter:blur(10px)
         }
-
-        .btn-good:hover {
-            background: #40c057;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(81, 207, 102, 0.3);
+        
+        .flip-hint{
+            font-size:12px;
+            opacity:.7;
+            margin-top:auto;
+            font-weight:500;
+            letter-spacing:.5px
         }
-
-        .btn-easy {
-            background: #667eea;
-            color: white;
-            flex: 1;
+        
+        .card-translation{
+            font-size:32px;
+            font-weight:700;
+            margin-bottom:25px;
+            animation:slideUp .5s ease-out
         }
-
-        .btn-easy:hover {
-            background: #5568d3;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        
+        .controls{
+            display:flex;
+            gap:12px;
+            justify-content:center;
+            flex-wrap:wrap
         }
-
-        .btn-reset {
-            background: #e0e0e0;
-            color: #333;
-            width: 100%;
-            margin-top: 10px;
+        
+        .btn{
+            padding:13px 22px;
+            border:none;
+            border-radius:12px;
+            cursor:pointer;
+            font-weight:600;
+            font-size:12px;
+            text-transform:uppercase;
+            transition:all .3s cubic-bezier(.4,0,.2,1);
+            letter-spacing:.5px;
+            font-family:'Inter',sans-serif;
+            box-shadow:0 6px 20px rgba(0,0,0,.12)
         }
-
-        .btn-reset:hover {
-            background: #d0d0d0;
+        
+        .btn:hover{
+            transform:translateY(-4px);
+            box-shadow:0 10px 30px rgba(0,0,0,.2)
         }
-
-        .navigation {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+        
+        .btn:active{
+            transform:translateY(-2px)
         }
-
-        .btn-nav {
-            flex: 1;
-            padding: 10px;
-            background: #f5f7fa;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            color: #667eea;
-            transition: all 0.3s ease;
+        
+        .btn-again{
+            background:linear-gradient(135deg,#ff6b6b,#ff5252);
+            color:white
         }
-
-        .btn-nav:hover {
-            background: #e0e0e0;
-            border-color: #667eea;
+        
+        .btn-hard{
+            background:linear-gradient(135deg,#ffa94d,#ff922b);
+            color:white
         }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
+        
+        .btn-good{
+            background:linear-gradient(135deg,#51cf66,#40c057);
+            color:white
         }
-
-        .modal.active {
-            display: flex;
+        
+        .btn-easy{
+            background:linear-gradient(135deg,#4ecdc4,#38ada9);
+            color:white
         }
-
-        .modal-content {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: modalSlide 0.4s ease-out;
+        
+        .btn-aleatorio{
+            background:linear-gradient(135deg,#9c27b0,#7b1fa2);
+            color:white
         }
-
-        @keyframes modalSlide {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+        
+        .navigation{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-top:25px;
+            padding-top:20px;
+            border-top:1px solid #e8eef7
         }
-
-        .modal-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 10px;
+        
+        .nav-btn{
+            padding:11px 20px;
+            background:#f5f7fa;
+            border:1.5px solid #e8eef7;
+            border-radius:10px;
+            cursor:pointer;
+            font-weight:600;
+            color:#667eea;
+            transition:all .3s cubic-bezier(.4,0,.2,1);
+            font-size:12px;
+            text-transform:uppercase;
+            letter-spacing:.5px
         }
-
-        .modal-message {
-            color: #666;
-            margin-bottom: 20px;
-            font-size: 14px;
+        
+        .nav-btn:hover:not(:disabled){
+            background:linear-gradient(135deg,#667eea,#764ba2);
+            color:white;
+            border-color:transparent;
+            transform:translateY(-2px);
+            box-shadow:0 6px 20px rgba(102,126,234,.3)
         }
-
-        .modal-stats {
-            background: #f5f7fa;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            text-align: left;
+        
+        .nav-btn:disabled{
+            opacity:.4;
+            cursor:not-allowed
         }
-
-        .modal-stat {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 14px;
+        
+        .progressText{
+            color:#667eea;
+            font-size:13px;
+            font-weight:600;
+            letter-spacing:.5px
         }
-
-        .modal-stat:last-child {
-            margin-bottom: 0;
+        
+        .list-mode{
+            max-height:600px;
+            overflow-y:auto
         }
-
-        .modal-label {
-            color: #999;
+        
+        .word-item{
+            display:flex;
+            justify-content:space-between;
+            padding:15px;
+            border-bottom:1px solid #e8eef7;
+            cursor:pointer;
+            transition:all .3s cubic-bezier(.4,0,.2,1);
+            border-radius:10px;
+            margin-bottom:8px
         }
-
-        .modal-value {
-            font-weight: bold;
-            color: #667eea;
+        
+        .word-item:hover{
+            background:linear-gradient(135deg,#f9fafd,#f5f7fa);
+            padding-left:20px;
+            box-shadow:0 4px 12px rgba(102,126,234,.1)
         }
-
-        .btn-modal {
-            background: #667eea;
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
+        
+        .word-name{
+            font-weight:700;
+            color:#333;
+            font-size:14px
         }
-
-        .btn-modal:hover {
-            background: #5568d3;
-            transform: translateY(-2px);
+        
+        .word-trans{
+            color:#999;
+            font-size:12px;
+            margin-top:4px
         }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #999;
+        
+        .stats-advanced{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+            gap:18px;
+            margin-bottom:25px
         }
-
-        .empty-state-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
+        
+        .advanced-stat{
+            background:linear-gradient(135deg,rgba(102,126,234,.05),rgba(118,75,162,.05));
+            padding:20px;
+            border-radius:16px;
+            border-left:4px solid;
+            border-image:linear-gradient(135deg,#667eea,#764ba2) 1;
+            transition:all .3s cubic-bezier(.4,0,.2,1)
         }
-
-        .empty-state-text {
-            font-size: 18px;
-            margin-bottom: 10px;
+        
+        .advanced-stat:hover{
+            transform:translateY(-5px);
+            box-shadow:0 10px 30px rgba(102,126,234,.15)
         }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-            }
-
-            h1 {
-                font-size: 22px;
-            }
-
-            .card {
-                height: 250px;
-                padding: 20px;
-            }
-
-            .card-word {
-                font-size: 24px;
-            }
-
-            .card-hint {
-                font-size: 14px;
-            }
-
-            .stats {
-                flex-direction: row;
-                gap: 10px;
-            }
-
-            .stat-box {
-                padding: 12px 10px;
-            }
-
-            .stat-value {
-                font-size: 20px;
-            }
+        
+        .advanced-stat-value{
+            font-size:28px;
+            font-weight:700;
+            background:linear-gradient(135deg,#667eea,#764ba2);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            background-clip:text;
+            font-family:'Space Grotesk',sans-serif
         }
+        
+        .advanced-stat-label{
+            font-size:12px;
+            color:#999;
+            margin-top:8px;
+            text-transform:uppercase;
+            letter-spacing:.5px;
+            font-weight:600
+        }
+        
+        .category-breakdown{
+            background:#f9fafd;
+            padding:20px;
+            border-radius:16px;
+            margin-top:20px;
+            max-height:400px;
+            overflow-y:auto;
+            border:1px solid #e8eef7
+        }
+        
+        .category-row{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:12px 0;
+            border-bottom:1px solid #e8eef7;
+            transition:all .2s
+        }
+        
+        .category-row:hover{
+            background:#ffffff;
+            padding:12px 8px;
+            border-radius:8px
+        }
+        
+        .category-row:last-child{border-bottom:none}
+        
+        .category-name{
+            font-weight:700;
+            color:#333;
+            min-width:150px;
+            font-size:13px
+        }
+        
+        .category-stats{
+            display:flex;
+            gap:20px;
+            font-size:12px;
+            color:#999
+        }
+        
+        .chart-container{
+            position:relative;
+            height:300px;
+            margin-bottom:30px
+        }
+        
+        @media (max-width:768px){
+            .main-layout{grid-template-columns:1fr}
+            .sidebar{max-height:none}
+            .flashcard{min-height:300px;padding:40px 25px}
+            .card-word{font-size:48px}
+            .header{flex-direction:column;gap:20px}
+            .header h1{font-size:24px}
+        }
+        
+        ::-webkit-scrollbar{width:8px}
+        ::-webkit-scrollbar-track{background:#f5f7fa;border-radius:10px}
+        ::-webkit-scrollbar-thumb{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:10px}
+        ::-webkit-scrollbar-thumb:hover{background:linear-gradient(135deg,#5568d3,#6a3f91)}
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎓 Flashcards Anki</h1>
-            <p class="subtitle">50 Palabras Clave del Inglés • Máxima Frecuencia</p>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-            <p id="progressText" style="color: #999; font-size: 12px; margin-top: 5px;">Tarjeta 1 de 50</p>
-        </div>
-
-        <div class="stats">
-            <div class="stat-box">
-                <div class="stat-value" id="correctCount">0</div>
-                <div class="stat-label">Correctas</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-value" id="totalCards">50</div>
-                <div class="stat-label">Total</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-value" id="accuracyPercent">0%</div>
-                <div class="stat-label">Precisión</div>
+            <h1>Wave of Words</h1>
+            <div class="header-tabs">
+                <button class="tab-btn active" onclick="switchTab('study')">📚 Estudio</button>
+                <button class="tab-btn" onclick="switchTab('stats')">📊 Estadísticas</button>
+                <button class="tab-btn" onclick="switchTab('progress')">📈 Progreso</button>
             </div>
         </div>
 
-        <div class="card-container" id="cardContainer">
-            <div class="card" id="card">
-                <div class="card-face card-front">
-                    <div class="card-category" id="cardCategory"></div>
-                    <div class="card-word" id="cardWord"></div>
-                    <div class="card-hint" id="cardHint"></div>
-                    <div class="click-hint">Haz clic para voltear</div>
+        <!-- TAB: STUDY -->
+        <div id="study" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalCount">846</div>
+                    <div class="stat-label">📚 Total</div>
                 </div>
-                <div class="card-face card-back">
-                    <div class="card-translation" id="cardTranslation"></div>
-                    <div class="card-example" id="cardExample"></div>
-                    <div class="card-pronunciation" id="cardPronunciation"></div>
+                <div class="stat-card">
+                    <div class="stat-value" id="correctCount">0</div>
+                    <div class="stat-label">✅ Aprendidas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="accuracyPercent">0%</div>
+                    <div class="stat-label">🎯 Precisión</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="sessionCount">0</div>
+                    <div class="stat-label">⚡ Sesión</div>
+                </div>
+            </div>
+
+            <div class="main-layout">
+                <div class="sidebar">
+                    <h3>🔍 Filtros</h3>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Buscar palabra..." autocomplete="off">
+                    
+                    <h3 style="margin-top:22px">📂 Categorías</h3>
+                    <div class="category-filters" id="categoryFilters"></div>
+
+                    <div style="margin-top:22px">
+                        <h3>🎮 Modo</h3>
+                        <div class="mode-buttons">
+                            <button class="mode-btn primary" onclick="setStudyMode()">▶ Estudio</button>
+                            <button class="mode-btn secondary" onclick="setListMode()">📋 Lista</button>
+                            <button class="mode-btn secondary" onclick="resetProgress()">🔄 Reiniciar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content">
+                    <div id="studyMode" class="study-mode">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+
+                        <div class="flashcard" id="mainCard" onclick="flipCard()">
+                            <div id="cardFront">
+                                <div class="card-category" id="cardCategory"></div>
+                                <div class="card-word" id="cardWord"></div>
+                                <div class="flip-hint">💡 Haz clic para voltear</div>
+                            </div>
+                            <div id="cardBack" style="display:none">
+                                <div class="card-translation" id="cardTranslation"></div>
+                            </div>
+                        </div>
+
+                        <div class="controls">
+                            <button class="btn btn-again" onclick="markCard('again')">🔴 Otra Vez</button>
+                            <button class="btn btn-hard" onclick="markCard('hard')">🟠 Difícil</button>
+                            <button class="btn btn-good" onclick="markCard('good')">🟢 Bien</button>
+                            <button class="btn btn-easy" onclick="markCard('easy')">🔵 Fácil</button>
+                            <button class="btn btn-aleatorio" onclick="shuffleCards()">🔀 Aleatorio</button>
+                        </div>
+
+                        <div class="navigation">
+                            <button class="nav-btn" id="prevBtn" onclick="previousCard()">⬅ Anterior</button>
+                            <span class="progressText" id="progressText"></span>
+                            <button class="nav-btn" id="nextBtn" onclick="nextCard()">Siguiente ➜</button>
+                        </div>
+                    </div>
+
+                    <div id="listMode" style="display:none">
+                        <div class="list-mode" id="wordList"></div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="navigation">
-            <button class="btn-nav" id="prevBtn" onclick="previousCard()">← Anterior</button>
-            <button class="btn-nav" id="nextBtn" onclick="nextCard()">Siguiente →</button>
-        </div>
-
-        <div class="controls">
-            <button class="btn btn-again" onclick="markCard('again')">Otra Vez</button>
-            <button class="btn btn-hard" onclick="markCard('hard')">Difícil</button>
-            <button class="btn btn-good" onclick="markCard('good')">Bien</button>
-            <button class="btn btn-easy" onclick="markCard('easy')">Fácil</button>
-        </div>
-
-        <button class="btn btn-reset" onclick="resetAll()">↻ Reiniciar desde el Inicio</button>
-    </div>
-
-    <div class="modal" id="completionModal">
-        <div class="modal-content">
-            <div class="modal-title">🎉 ¡Sesión Completada!</div>
-            <div class="modal-message">Excelente trabajo. Aquí están tus estadísticas:</div>
-            <div class="modal-stats">
-                <div class="modal-stat">
-                    <span class="modal-label">Tarjetas Correctas:</span>
-                    <span class="modal-value" id="modalCorrect">0</span>
+        <!-- TAB: STATISTICS -->
+        <div id="stats" class="tab-content">
+            <h2 style="margin-bottom:25px;color:white;font-size:28px;font-family:'Space Grotesk',sans-serif;font-weight:700">📊 Estadísticas Detalladas</h2>
+            <div class="stats-advanced">
+                <div class="advanced-stat">
+                    <div class="advanced-stat-value" id="totalWords">0</div>
+                    <div class="advanced-stat-label">📚 Palabras estudiadas</div>
                 </div>
-                <div class="modal-stat">
-                    <span class="modal-label">Precisión Total:</span>
-                    <span class="modal-value" id="modalAccuracy">0%</span>
+                <div class="advanced-stat">
+                    <div class="advanced-stat-value" id="correctWords">0</div>
+                    <div class="advanced-stat-label">✅ Respuestas correctas</div>
                 </div>
-                <div class="modal-stat">
-                    <span class="modal-label">Tiempo Estimado:</span>
-                    <span class="modal-value" id="modalTime">-</span>
+                <div class="advanced-stat">
+                    <div class="advanced-stat-value" id="accuracy">0%</div>
+                    <div class="advanced-stat-label">🎯 Tasa de acierto</div>
+                </div>
+                <div class="advanced-stat">
+                    <div class="advanced-stat-value" id="masteryRate">0%</div>
+                    <div class="advanced-stat-label">👑 Dominio general</div>
                 </div>
             </div>
-            <button class="btn-modal" onclick="resetAll()">Volver a Estudiar</button>
+
+            <div style="background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-radius:20px;padding:25px;border:1px solid rgba(255,255,255,.5)">
+                <h3 style="margin-bottom:20px;color:#333;font-size:16px;font-weight:700">📈 Desglose por Categoría</h3>
+                <div class="category-breakdown" id="categoryStats"></div>
+            </div>
+        </div>
+
+        <!-- TAB: PROGRESS -->
+        <div id="progress" class="tab-content">
+            <h2 style="margin-bottom:25px;color:white;font-size:28px;font-family:'Space Grotesk',sans-serif;font-weight:700">📈 Gráfico de Progreso</h2>
+            <div style="background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-radius:20px;padding:30px;border:1px solid rgba(255,255,255,.5)">
+                <div class="chart-container">
+                    <canvas id="progressChart"></canvas>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Base de datos de flashcards
-        const flashcards = [
-            {
-                word: "the",
-                category: "Artículo Determinado",
-                hint: "**The** cat is sleeping. (El artículo más usado en inglés, marca especificidad)",
-                translation: "el, la, los, las",
-                example: "El gato está durmiendo.",
-                pronunciation: "/ðə/ o /ðiː/"
-            },
-            {
-                word: "and",
-                category: "Conjunción",
-                hint: "She likes **and** watches movies. (Conecta dos ideas; casi tan frecuente como 'the')",
-                translation: "y",
-                example: "Ella le gusta y mira películas.",
-                pronunciation: "/ænd/"
-            },
-            {
-                word: "a",
-                category: "Artículo Indefinido",
-                hint: "I have **a** dog at home. (Introduce algo nuevo o singular)",
-                translation: "un, una",
-                example: "Tengo un perro en casa.",
-                pronunciation: "/ə/ o /eɪ/"
-            },
-            {
-                word: "to",
-                category: "Preposición/Infinitivo",
-                hint: "I want **to** learn English. (Precede verbos en infinitivo; muy frecuente)",
-                translation: "a, para",
-                example: "Quiero aprender inglés.",
-                pronunciation: "/tu/ o /tə/"
-            },
-            {
-                word: "of",
-                category: "Preposición de Posesión",
-                hint: "The color **of** the car is red. (Expresa posesión o pertenencia)",
-                translation: "de",
-                example: "El color del coche es rojo.",
-                pronunciation: "/əv/ o /ʌv/"
-            },
-            {
-                word: "in",
-                category: "Preposición de Lugar/Tiempo",
-                hint: "I live **in** New York. (Dentro de, contenido; uso frecuente)",
-                translation: "en, dentro de",
-                example: "Vivo en Nueva York.",
-                pronunciation: "/ɪn/"
-            },
-            {
-                word: "that",
-                category: "Pronombre Demostrativo",
-                hint: "**That** book is interesting. (Señala algo lejano o ya mencionado)",
-                translation: "ese, esa, aquello",
-                example: "Ese libro es interesante.",
-                pronunciation: "/ðæt/"
-            },
-            {
-                word: "is",
-                category: "Verbo To Be - Presente",
-                hint: "She **is** a teacher. (Tercera persona singular; estado/identidad)",
-                translation: "es, está",
-                example: "Ella es una maestra.",
-                pronunciation: "/ɪz/"
-            },
-            {
-                word: "you",
-                category: "Pronombre Personal",
-                hint: "Can **you** help me? (Dirigirse al oyente; muy usado)",
-                translation: "tú, ustedes, te, os",
-                example: "¿Puedes ayudarme?",
-                pronunciation: "/juː/"
-            },
-            {
-                word: "for",
-                category: "Preposición de Propósito/Duración",
-                hint: "This gift is **for** you. (Indica propósito, destinatario, duración)",
-                translation: "para, por",
-                example: "Este regalo es para ti.",
-                pronunciation: "/fɔr/ o /fər/"
-            },
-            {
-                word: "it",
-                category: "Pronombre Neutro",
-                hint: "**It** is cold today. (Cosa, idea, situación neutra)",
-                translation: "eso, lo, el",
-                example: "Hace frío hoy.",
-                pronunciation: "/ɪt/"
-            },
-            {
-                word: "was",
-                category: "Verbo To Be - Pasado",
-                hint: "He **was** happy yesterday. (Pasado simple, tercera persona)",
-                translation: "era, estaba",
-                example: "Él estaba feliz ayer.",
-                pronunciation: "/wəz/ o /wɑːz/"
-            },
-            {
-                word: "he",
-                category: "Pronombre Masculino",
-                hint: "**He** plays football. (Masculino singular; sujeto de oración)",
-                translation: "él",
-                example: "Él juega fútbol.",
-                pronunciation: "/hiː/"
-            },
-            {
-                word: "have",
-                category: "Verbo Auxiliar/Principal",
-                hint: "I **have** two brothers. (Posesión, tiempo perfecto)",
-                translation: "tengo, he",
-                example: "Tengo dos hermanos.",
-                pronunciation: "/hæv/ o /həv/"
-            },
-            {
-                word: "with",
-                category: "Preposición de Compañía",
-                hint: "I went **with** my friend. (Acompañamiento, instrumento)",
-                translation: "con",
-                example: "Fui con mi amigo.",
-                pronunciation: "/wɪð/ o /wɪθ/"
-            },
-            {
-                word: "be",
-                category: "Verbo To Be - Infinitivo",
-                hint: "To **be** or not **to be**. (Existencia, estado; fundamental)",
-                translation: "ser, estar",
-                example: "Ser o no ser.",
-                pronunciation: "/biː/"
-            },
-            {
-                word: "this",
-                category: "Pronombre Demostrativo Cercano",
-                hint: "**This** is my house. (Cercano, presente; mayor énfasis que 'that')",
-                translation: "este, esto",
-                example: "Esta es mi casa.",
-                pronunciation: "/ðɪs/"
-            },
-            {
-                word: "but",
-                category: "Conjunción de Contraste",
-                hint: "I like pizza, **but** I don't like olives. (Opone ideas; contraste)",
-                translation: "pero, sino",
-                example: "Me gusta la pizza, pero no me gustan las aceitunas.",
-                pronunciation: "/bət/ o /bʌt/"
-            },
-            {
-                word: "his",
-                category: "Pronombre Posesivo Masculino",
-                hint: "This is **his** book. (Pertenencia masculina)",
-                translation: "su (de él)",
-                example: "Este es su libro.",
-                pronunciation: "/hɪz/"
-            },
-            {
-                word: "by",
-                category: "Preposición Multifunción",
-                hint: "I walk **by** the river. (Cerca de, mediante, agente pasivo)",
-                translation: "por, cerca de",
-                example: "Camino cerca del río.",
-                pronunciation: "/baɪ/"
-            },
-            {
-                word: "from",
-                category: "Preposición de Origen",
-                hint: "I come **from** Spain. (Origen, procedencia; muy común)",
-                translation: "de, desde",
-                example: "Vengo de España.",
-                pronunciation: "/frəm/ o /frɑːm/"
-            },
-            {
-                word: "they",
-                category: "Pronombre Plural",
-                hint: "**They** are students. (Tercera persona plural; neutro)",
-                translation: "ellos, ellas",
-                example: "Son estudiantes.",
-                pronunciation: "/ðeɪ/"
-            },
-            {
-                word: "we",
-                category: "Pronombre Plural Inclusivo",
-                hint: "**We** like ice cream. (Primera persona plural; incluye oyente)",
-                translation: "nosotros, nosotras",
-                example: "Nos gusta el helado.",
-                pronunciation: "/wiː/"
-            },
-            {
-                word: "can",
-                category: "Verbo Modal de Capacidad",
-                hint: "**Can** you swim? (Habilidad, posibilidad, permiso)",
-                translation: "poder, puedo",
-                example: "¿Puedes nadar?",
-                pronunciation: "/kæn/ o /kən/"
-            },
-            {
-                word: "all",
-                category: "Cuantificador Universal",
-                hint: "**All** students passed the exam. (Totalidad, completitud)",
-                translation: "todos, todas, todo",
-                example: "Todos los estudiantes aprobaron el examen.",
-                pronunciation: "/ɔːl/"
-            },
-            {
-                word: "would",
-                category: "Verbo Modal Condicional",
-                hint: "I **would** like coffee. (Condicional, cortesía; muy frecuente)",
-                translation: "querría, quisiera",
-                example: "Quisiera café.",
-                pronunciation: "/wʊd/ o /wəd/"
-            },
-            {
-                word: "there",
-                category: "Adverbio de Lugar",
-                hint: "**There** is a cat outside. (Existencia, ubicación; sujeto falso 'there is')",
-                translation: "hay, allí",
-                example: "Hay un gato afuera.",
-                pronunciation: "/ðɛr/"
-            },
-            {
-                word: "their",
-                category: "Pronombre Posesivo Plural",
-                hint: "**Their** house is big. (Pertenencia plural, neutro)",
-                translation: "su (de ellos/ellas)",
-                example: "Su casa es grande.",
-                pronunciation: "/ðɛr/"
-            },
-            {
-                word: "what",
-                category: "Pronombre Interrogativo",
-                hint: "**What** is your name? (Pregunta sobre cosa, objeto)",
-                translation: "qué",
-                example: "¿Cuál es tu nombre?",
-                pronunciation: "/wɑːt/ o /wɑt/"
-            },
-            {
-                word: "so",
-                category: "Adverbio de Grado/Conjunción",
-                hint: "The movie was **so** good! (Grado, intensidad, consecuencia)",
-                translation: "tan, tan...que",
-                example: "¡La película fue tan buena!",
-                pronunciation: "/soʊ/"
-            },
-            {
-                word: "up",
-                category: "Adverbio/Preposición de Dirección",
-                hint: "Stand **up** please. (Hacia arriba, incremento)",
-                translation: "arriba, de pie",
-                example: "Ponte de pie por favor.",
-                pronunciation: "/ʌp/"
-            },
-            {
-                word: "more",
-                category: "Cuantificador Comparativo",
-                hint: "I want **more** ice cream. (Mayor cantidad, comparación)",
-                translation: "más",
-                example: "Quiero más helado.",
-                pronunciation: "/mɔr/ o /mɔːr/"
-            },
-            {
-                word: "could",
-                category: "Verbo Modal Pasado",
-                hint: "**Could** you help me? (Pasado de 'can'; cortesía, posibilidad)",
-                translation: "podría, pude",
-                example: "¿Podrías ayudarme?",
-                pronunciation: "/kʊd/ o /kəd/"
-            },
-            {
-                word: "who",
-                category: "Pronombre Interrogativo Personal",
-                hint: "**Who** is your best friend? (Pregunta sobre persona)",
-                translation: "quién",
-                example: "¿Quién es tu mejor amigo?",
-                pronunciation: "/huː/"
-            },
-            {
-                word: "go",
-                category: "Verbo de Movimiento",
-                hint: "Let's **go** to the beach. (Movimiento, partida)",
-                translation: "ir, vamos",
-                example: "Vamos a la playa.",
-                pronunciation: "/ɡoʊ/"
-            },
-            {
-                word: "me",
-                category: "Pronombre Objeto Directo/Indirecto",
-                hint: "Can you help **me**? (Objeto, complemento; muy común)",
-                translation: "me, mí",
-                example: "¿Puedes ayudarme?",
-                pronunciation: "/miː/"
-            },
-            {
-                word: "as",
-                category: "Conjunción/Preposición Multifunción",
-                hint: "**As** you know, I am busy. (Como, en calidad de, mientras)",
-                translation: "como, mientras",
-                example: "Como sabes, estoy ocupado.",
-                pronunciation: "/æz/ o /əz/"
-            },
-            {
-                word: "get",
-                category: "Verbo Multifunción",
-                hint: "I want **to get** a new car. (Obtener, conseguir, llegar)",
-                translation: "conseguir, obtener, llegar",
-                example: "Quiero conseguir un coche nuevo.",
-                pronunciation: "/ɡɛt/"
-            },
-            {
-                word: "or",
-                category: "Conjunción Disyuntiva",
-                hint: "Do you want tea **or** coffee? (Alternancia, opción)",
-                translation: "o",
-                example: "¿Quieres té o café?",
-                pronunciation: "/ɔr/ o /ɚ/"
-            },
-            {
-                word: "know",
-                category: "Verbo de Conocimiento",
-                hint: "I **know** the answer. (Conocer, saber; información establecida)",
-                translation: "saber, conocer",
-                example: "Sé la respuesta.",
-                pronunciation: "/noʊ/"
-            },
-            {
-                word: "make",
-                category: "Verbo Multifunción",
-                hint: "I want **to make** a cake. (Crear, elaborar, hacer)",
-                translation: "hacer, preparar, elaborar",
-                example: "Quiero hacer un pastel.",
-                pronunciation: "/meɪk/"
-            },
-            {
-                word: "him",
-                category: "Pronombre Objeto Masculino",
-                hint: "I like **him** very much. (Objeto indirecto/directo masculino)",
-                translation: "lo, le",
-                example: "Me cae muy bien.",
-                pronunciation: "/hɪm/"
-            },
-            {
-                word: "see",
-                category: "Verbo de Percepción Visual",
-                hint: "Can you **see** the mountain? (Ver, observar; percepción)",
-                translation: "ver",
-                example: "¿Puedes ver la montaña?",
-                pronunciation: "/siː/"
-            },
-            {
-                word: "my",
-                category: "Pronombre Posesivo Primera Persona",
-                hint: "**My** name is John. (Pertenencia, primera persona)",
-                translation: "mi, mis",
-                example: "Mi nombre es John.",
-                pronunciation: "/maɪ/"
-            },
-            {
-                word: "how",
-                category: "Adverbio Interrogativo de Modo",
-                hint: "**How** are you today? (Manera, estado, grado)",
-                translation: "cómo",
-                example: "¿Cómo estás hoy?",
-                pronunciation: "/haʊ/"
-            },
-            {
-                word: "any",
-                category: "Cuantificador de Cantidad",
-                hint: "Do you have **any** books? (Cantidad indeterminada; negativa/interrogativa)",
-                translation: "algún, alguno, cualquier",
-                example: "¿Tienes algún libro?",
-                pronunciation: "/ɛni/"
-            },
-            {
-                word: "an",
-                category: "Artículo Indefinido Vocálico",
-                hint: "I eat **an** apple. (Singular, antes de vocales; variante de 'a')",
-                translation: "un, una (antes de vocales)",
-                example: "Como una manzana.",
-                pronunciation: "/ən/ o /æn/"
-            },
-            {
-                word: "some",
-                category: "Cuantificador Indefinido",
-                hint: "I have **some** money. (Cantidad indefinida, positiva; 'algún')",
-                translation: "algún, alguno, un poco de",
-                example: "Tengo algo de dinero.",
-                pronunciation: "/səm/ o /sʌm/"
-            },
-            {
-                word: "her",
-                category: "Pronombre Objeto Femenino",
-                hint: "I saw **her** yesterday. (Objeto indirecto/directo femenino)",
-                translation: "la, le",
-                example: "La vi ayer.",
-                pronunciation: "/hɜr/ o /ɚ/"
-            },
-            {
-                word: "our",
-                category: "Pronombre Posesivo Plural",
-                hint: "**Our** school is big. (Pertenencia primera persona plural)",
-                translation: "nuestro, nuestra",
-                example: "Nuestra escuela es grande.",
-                pronunciation: "/aʊr/ o /ɑr/"
-            },
-            {
-                word: "now",
-                category: "Adverbio de Tiempo Presente",
-                hint: "I am busy **now**. (Tiempo presente, actualidad, inmediatez)",
-                translation: "ahora",
-                example: "Estoy ocupado ahora.",
-                pronunciation: "/naʊ/"
-            }
+        const FLASHCARDS = [
+            {word:"all",trans:"todos",category:"Cuantificador"},{word:"and",trans:"y",category:"Conjunción"},{word:"a",trans:"un",category:"Artículo"},{word:"to",trans:"a, para",category:"Preposición"},{word:"of",trans:"de",category:"Preposición"},{word:"in",trans:"en",category:"Preposición"},{word:"is",trans:"es",category:"Verbo"},{word:"that",trans:"ese",category:"Pronombre"},{word:"it",trans:"eso",category:"Pronombre"},{word:"you",trans:"tú",category:"Pronombre"},{word:"for",trans:"para",category:"Preposición"},{word:"was",trans:"era",category:"Verbo"},{word:"he",trans:"él",category:"Pronombre"},{word:"have",trans:"tengo",category:"Verbo"},{word:"with",trans:"con",category:"Preposición"},{word:"be",trans:"ser",category:"Verbo"},{word:"this",trans:"este",category:"Pronombre"},{word:"but",trans:"pero",category:"Conjunción"},{word:"his",trans:"su",category:"Pronombre"},{word:"by",trans:"por",category:"Preposición"},{word:"from",trans:"de",category:"Preposición"},{word:"they",trans:"ellos",category:"Pronombre"},{word:"we",trans:"nosotros",category:"Pronombre"},{word:"can",trans:"poder",category:"Verbo Modal"},{word:"would",trans:"quisiera",category:"Verbo Modal"},{word:"there",trans:"hay",category:"Adverbio"},{word:"their",trans:"su",category:"Pronombre"},{word:"what",trans:"qué",category:"Pronombre"},{word:"so",trans:"tan",category:"Adverbio"},{word:"up",trans:"arriba",category:"Adverbio"},{word:"more",trans:"más",category:"Cuantificador"},{word:"could",trans:"podría",category:"Verbo Modal"},{word:"who",trans:"quién",category:"Pronombre"},{word:"go",trans:"ir",category:"Verbo"},{word:"me",trans:"me",category:"Pronombre"},{word:"as",trans:"como",category:"Conjunción"},{word:"get",trans:"conseguir",category:"Verbo"},{word:"or",trans:"o",category:"Conjunción"},{word:"know",trans:"saber",category:"Verbo"},{word:"make",trans:"hacer",category:"Verbo"},{word:"him",trans:"lo",category:"Pronombre"},{word:"see",trans:"ver",category:"Verbo"},{word:"my",trans:"mi",category:"Pronombre"},{word:"how",trans:"cómo",category:"Adverbio"},{word:"any",trans:"algún",category:"Cuantificador"},{word:"an",trans:"un",category:"Artículo"},{word:"some",trans:"algo",category:"Cuantificador"},{word:"her",trans:"la",category:"Pronombre"},{word:"our",trans:"nuestro",category:"Pronombre"},{word:"now",trans:"ahora",category:"Adverbio"},{word:"over",trans:"sobre",category:"Preposición"},{word:"pull",trans:"tirar",category:"Verbo"},{word:"ring",trans:"anillo",category:"Sustantivo"},{word:"sell",trans:"vender",category:"Verbo"},{word:"similar",trans:"similar",category:"Adjetivo"},{word:"speed",trans:"velocidad",category:"Sustantivo"},{word:"than",trans:"que",category:"Conjunción"},{word:"your",trans:"tu",category:"Pronombre"},{word:"above",trans:"arriba",category:"Preposición"},{word:"begin",trans:"empezar",category:"Verbo"},{word:"century",trans:"siglo",category:"Sustantivo"},{word:"consider",trans:"considerar",category:"Verbo"},{word:"dangerous",trans:"peligroso",category:"Adjetivo"},{word:"dark",trans:"oscuro",category:"Adjetivo"},{word:"exchange",trans:"intercambiar",category:"Verbo"},{word:"government",trans:"gobierno",category:"Sustantivo"},{word:"hear",trans:"escuchar",category:"Verbo"},{word:"jump",trans:"saltar",category:"Verbo"},{word:"material",trans:"material",category:"Sustantivo"},{word:"near",trans:"cerca",category:"Preposición"},{word:"past",trans:"pasado",category:"Sustantivo"},{word:"produce",trans:"producir",category:"Verbo"},{word:"remove",trans:"quitar",category:"Verbo"},{word:"secret",trans:"secreto",category:"Sustantivo"},{word:"song",trans:"canción",category:"Sustantivo"},{word:"television",trans:"televisión",category:"Sustantivo"},{word:"value",trans:"valor",category:"Sustantivo"},{word:"when",trans:"cuando",category:"Conjunción"},{word:"arm",trans:"brazo",category:"Sustantivo"},{word:"behind",trans:"detrás",category:"Preposición"},{word:"case",trans:"caso",category:"Sustantivo"},{word:"collect",trans:"recoger",category:"Verbo"},{word:"draw",trans:"dibujar",category:"Verbo"},{word:"examine",trans:"examinar",category:"Verbo"},{word:"fall",trans:"otoño",category:"Sustantivo"},{word:"grow",trans:"crecer",category:"Verbo"},{word:"immediately",trans:"inmediatamente",category:"Adverbio"},{word:"low",trans:"bajo",category:"Adjetivo"},{word:"mind",trans:"mente",category:"Sustantivo"},{word:"off",trans:"apagado",category:"Adverbio"},{word:"pass",trans:"pasar",category:"Verbo"},{word:"radio",trans:"radio",category:"Sustantivo"},{word:"shoe",trans:"zapato",category:"Sustantivo"},{word:"station",trans:"estación",category:"Sustantivo"},{word:"sure",trans:"seguro",category:"Adjetivo"},{word:"test",trans:"prueba",category:"Sustantivo"},{word:"usual",trans:"usual",category:"Adjetivo"},{word:"while",trans:"mientras",category:"Conjunción"},{word:"ago",trans:"hace",category:"Adverbio"},{word:"along",trans:"a lo largo",category:"Preposición"},{word:"bear",trans:"soportar",category:"Verbo"},{word:"condition",trans:"condición",category:"Sustantivo"},{word:"direct",trans:"directo",category:"Adjetivo"},{word:"edge",trans:"borde",category:"Sustantivo"},{word:"fine",trans:"bien",category:"Adjetivo"},{word:"half",trans:"mitad",category:"Sustantivo"},{word:"chicken",trans:"pollo",category:"Sustantivo"},{word:"increase",trans:"incrementar",category:"Verbo"},{word:"magazine",trans:"revista",category:"Sustantivo"},{word:"nature",trans:"naturaleza",category:"Sustantivo"},{word:"plate",trans:"plato",category:"Sustantivo"},{word:"poor",trans:"pobre",category:"Adjetivo"},{word:"respect",trans:"respeto",category:"Sustantivo"},{word:"sharp",trans:"agudo",category:"Adjetivo"},{word:"sometimes",trans:"a veces",category:"Adverbio"},{word:"still",trans:"todavía",category:"Adverbio"},{word:"tall",trans:"alto",category:"Adjetivo"},{word:"add",trans:"añadir",category:"Verbo"},{word:"among",trans:"entre",category:"Preposición"},{word:"built",trans:"construido",category:"Adjetivo"},{word:"common",trans:"común",category:"Adjetivo"},{word:"depend",trans:"depender",category:"Verbo"},{word:"early",trans:"temprano",category:"Adverbio"},{word:"fly",trans:"volar",category:"Verbo"},{word:"happen",trans:"suceder",category:"Verbo"},{word:"check",trans:"revisar",category:"Verbo"},{word:"introduce",trans:"presentar",category:"Verbo"},{word:"less",trans:"menos",category:"Cuantificador"},{word:"mark",trans:"marca",category:"Sustantivo"},{word:"patient",trans:"paciente",category:"Sustantivo"},{word:"perhaps",trans:"quizás",category:"Adverbio"},{word:"rise",trans:"subir",category:"Verbo"},{word:"sense",trans:"sentido",category:"Sustantivo"},{word:"short",trans:"corto",category:"Adjetivo"},{word:"state",trans:"declarar",category:"Verbo"},{word:"turn",trans:"girar",category:"Verbo"},{word:"will",trans:"será",category:"Verbo Modal"},{word:"act",trans:"actuar",category:"Verbo"},{word:"appear",trans:"aparecer",category:"Verbo"},{word:"break",trans:"romper",category:"Verbo"},{word:"course",trans:"curso",category:"Sustantivo"},{word:"court",trans:"corte",category:"Sustantivo"},{word:"discuss",trans:"discutir",category:"Verbo"},{word:"effect",trans:"efecto",category:"Sustantivo"},{word:"form",trans:"formar",category:"Verbo"},{word:"hold",trans:"sostener",category:"Verbo"},{word:"insect",trans:"insecto",category:"Sustantivo"},{word:"mean",trans:"significar",category:"Verbo"},{word:"once",trans:"una vez",category:"Adverbio"},{word:"purpose",trans:"propósito",category:"Sustantivo"},{word:"really",trans:"de verdad",category:"Adverbio"},{word:"ride",trans:"paseo",category:"Sustantivo"},{word:"situation",trans:"situación",category:"Sustantivo"},{word:"success",trans:"éxito",category:"Sustantivo"},{word:"though",trans:"aunque",category:"Conjunción"},{word:"upon",trans:"sobre",category:"Preposición"},{word:"war",trans:"guerra",category:"Sustantivo"},{word:"afternoon",trans:"tarde",category:"Sustantivo"},{word:"busy",trans:"ocupado",category:"Adjetivo"},{word:"coffee",trans:"café",category:"Sustantivo"},{word:"detail",trans:"detalle",category:"Sustantivo"},{word:"especially",trans:"especialmente",category:"Adverbio"},{word:"finish",trans:"terminar",category:"Verbo"},{word:"ground",trans:"suelo",category:"Sustantivo"},{word:"holiday",trans:"fiesta",category:"Sustantivo"},{word:"choice",trans:"elección",category:"Sustantivo"},{word:"kitchen",trans:"cocina",category:"Sustantivo"},{word:"lesson",trans:"lección",category:"Sustantivo"},{word:"music",trans:"música",category:"Sustantivo"},{word:"orange",trans:"naranja",category:"Sustantivo"},{word:"perfect",trans:"perfecto",category:"Adjetivo"},{word:"request",trans:"solicitud",category:"Sustantivo"},{word:"season",trans:"temporada",category:"Sustantivo"},{word:"sick",trans:"enfermo",category:"Adjetivo"},{word:"tomorrow",trans:"mañana",category:"Sustantivo"},{word:"welcome",trans:"bienvenido",category:"Adjetivo"},{word:"yesterday",trans:"ayer",category:"Adverbio"},{word:"agree",trans:"estar de acuerdo",category:"Verbo"},{word:"bridge",trans:"puente",category:"Sustantivo"},{word:"cake",trans:"pastel",category:"Sustantivo"},{word:"customer",trans:"cliente",category:"Sustantivo"},{word:"date",trans:"fecha",category:"Sustantivo"},{word:"enter",trans:"entrar",category:"Verbo"},{word:"future",trans:"futuro",category:"Sustantivo"},{word:"gentleman",trans:"caballero",category:"Sustantivo"},{word:"hair",trans:"pelo",category:"Sustantivo"},{word:"image",trans:"imagen",category:"Sustantivo"},{word:"language",trans:"idioma",category:"Sustantivo"},{word:"market",trans:"mercado",category:"Sustantivo"},{word:"plane",trans:"avión",category:"Sustantivo"},{word:"private",trans:"privado",category:"Adjetivo"},{word:"restaurant",trans:"restaurante",category:"Sustantivo"},{word:"size",trans:"tamaño",category:"Sustantivo"},{word:"sky",trans:"cielo",category:"Sustantivo"},{word:"smart",trans:"inteligente",category:"Adjetivo"},{word:"thank",trans:"gracias",category:"Verbo"},{word:"weather",trans:"clima",category:"Sustantivo"},{word:"actor",trans:"actor",category:"Sustantivo"},{word:"bottle",trans:"botella",category:"Sustantivo"},{word:"cloth",trans:"paño",category:"Sustantivo"},{word:"coat",trans:"saco",category:"Sustantivo"},{word:"destroy",trans:"destruir",category:"Verbo"},{word:"everywhere",trans:"en todas partes",category:"Adverbio"},{word:"finger",trans:"dedo",category:"Sustantivo"},{word:"guide",trans:"guía",category:"Sustantivo"},{word:"improve",trans:"mejorar",category:"Verbo"},{word:"knife",trans:"cuchillo",category:"Sustantivo"},{word:"large",trans:"grande",category:"Adjetivo"},{word:"mistake",trans:"error",category:"Sustantivo"},{word:"ocean",trans:"océano",category:"Sustantivo"},{word:"plant",trans:"planta",category:"Sustantivo"},{word:"repeat",trans:"repetir",category:"Verbo"},{word:"salt",trans:"sal",category:"Sustantivo"},{word:"special",trans:"especial",category:"Adjetivo"},{word:"teach",trans:"enseñar",category:"Verbo"},{word:"uncle",trans:"tío",category:"Sustantivo"},{word:"winter",trans:"invierno",category:"Sustantivo"},{word:"angry",trans:"enojado",category:"Adjetivo"},{word:"article",trans:"artículo",category:"Sustantivo"},{word:"build",trans:"construir",category:"Verbo"},{word:"dirty",trans:"sucio",category:"Adjetivo"},{word:"except",trans:"excepto",category:"Preposición"},{word:"famous",trans:"famoso",category:"Adjetivo"},{word:"gas",trans:"gas",category:"Sustantivo"},{word:"hotel",trans:"hotel",category:"Sustantivo"},{word:"cheap",trans:"barato",category:"Adjetivo"},{word:"interview",trans:"entrevista",category:"Sustantivo"},{word:"moon",trans:"luna",category:"Sustantivo"},{word:"nice",trans:"bonito",category:"Adjetivo"},{word:"prepare",trans:"preparar",category:"Verbo"},{word:"prison",trans:"prisión",category:"Sustantivo"},{word:"rice",trans:"arroz",category:"Sustantivo"},{word:"seem",trans:"parecer",category:"Verbo"},{word:"skirt",trans:"falda",category:"Sustantivo"},{word:"strange",trans:"extraño",category:"Adjetivo"},{word:"train",trans:"tren",category:"Sustantivo"},{word:"warm",trans:"calentar",category:"Verbo"},{word:"account",trans:"cuenta",category:"Sustantivo"},{word:"bird",trans:"pájaro",category:"Sustantivo"},{word:"cloud",trans:"nube",category:"Sustantivo"},{word:"comfortable",trans:"cómodo",category:"Adjetivo"},{word:"damage",trans:"dañar",category:"Verbo"},{word:"dust",trans:"polvo",category:"Sustantivo"},{word:"exercise",trans:"ejercicio",category:"Sustantivo"},{word:"favourite",trans:"favorito",category:"Adjetivo"},{word:"hospital",trans:"hospital",category:"Sustantivo"},{word:"joke",trans:"broma",category:"Sustantivo"},{word:"message",trans:"mensaje",category:"Sustantivo"},{word:"night",trans:"noche",category:"Sustantivo"},{word:"paint",trans:"pintar",category:"Verbo"},{word:"pleasure",trans:"placer",category:"Sustantivo"},{word:"relationship",trans:"relación",category:"Sustantivo"},{word:"science",trans:"ciencia",category:"Sustantivo"},{word:"serious",trans:"serio",category:"Adjetivo"},{word:"spend",trans:"gastar",category:"Verbo"},{word:"tired",trans:"cansado",category:"Adjetivo"},{word:"wrong",trans:"incorrecto",category:"Adjetivo"},{word:"amount",trans:"cantidad",category:"Sustantivo"},{word:"bank",trans:"banco",category:"Sustantivo"},{word:"brown",trans:"marrón",category:"Adjetivo"},{word:"crowd",trans:"multitud",category:"Sustantivo"},{word:"deal",trans:"acuerdo",category:"Sustantivo"},{word:"engine",trans:"motor",category:"Sustantivo"},{word:"follow",trans:"seguir",category:"Verbo"},{word:"chocolate",trans:"chocolate",category:"Sustantivo"},{word:"individual",trans:"individuo",category:"Sustantivo"},{word:"left",trans:"izquierda",category:"Adjetivo"},{word:"meal",trans:"comida",category:"Sustantivo"},{word:"oil",trans:"petróleo",category:"Sustantivo"},{word:"pain",trans:"dolor",category:"Sustantivo"},{word:"probably",trans:"probablemente",category:"Adverbio"},{word:"replace",trans:"reemplazar",category:"Verbo"},{word:"society",trans:"sociedad",category:"Sustantivo"},{word:"square",trans:"cuadrado",category:"Sustantivo"},{word:"step",trans:"paso",category:"Sustantivo"},{word:"temperature",trans:"temperatura",category:"Sustantivo"},{word:"university",trans:"universidad",category:"Sustantivo"},{word:"accept",trans:"aceptar",category:"Verbo"},{word:"advance",trans:"avanzar",category:"Verbo"},{word:"bag",trans:"bolso",category:"Sustantivo"},{word:"captain",trans:"capitán",category:"Sustantivo"},{word:"centre",trans:"centro",category:"Sustantivo"},{word:"demand",trans:"demanda",category:"Sustantivo"},{word:"enemy",trans:"enemigo",category:"Sustantivo"},{word:"factory",trans:"fábrica",category:"Sustantivo"},{word:"hungry",trans:"hambriento",category:"Adjetivo"},{word:"illegal",trans:"ilegal",category:"Adjetivo"},{word:"law",trans:"ley",category:"Sustantivo"},{word:"nose",trans:"nariz",category:"Sustantivo"},{word:"petrol",trans:"gasolina",category:"Sustantivo"},{word:"proud",trans:"orgulloso",category:"Adjetivo"},{word:"responsible",trans:"responsable",category:"Adjetivo"},{word:"store",trans:"tienda",category:"Sustantivo"},{word:"successful",trans:"exitoso",category:"Adjetivo"},{word:"swim",trans:"nadar",category:"Verbo"},{word:"top",trans:"cima",category:"Sustantivo"},{word:"win",trans:"ganar",category:"Verbo"},{word:"available",trans:"disponible",category:"Adjetivo"},{word:"boat",trans:"bote",category:"Sustantivo"},{word:"borrow",trans:"pedir prestado",category:"Verbo"},{word:"coast",trans:"costa",category:"Sustantivo"},{word:"cream",trans:"crema",category:"Sustantivo"},{word:"design",trans:"diseño",category:"Sustantivo"},{word:"expression",trans:"expresión",category:"Sustantivo"},{word:"farm",trans:"granja",category:"Sustantivo"},{word:"history",trans:"historia",category:"Sustantivo"},{word:"injure",trans:"lesionar",category:"Verbo"},{word:"map",trans:"mapa",category:"Sustantivo"},{word:"obtain",trans:"obtener",category:"Verbo"},{word:"peaceful",trans:"pacífico",category:"Adjetivo"},{word:"practise",trans:"práctica",category:"Sustantivo"},{word:"recently",trans:"recientemente",category:"Adverbio"},{word:"shape",trans:"forma",category:"Sustantivo"},{word:"silver",trans:"plata",category:"Sustantivo"},{word:"smoke",trans:"fumar",category:"Verbo"},{word:"touch",trans:"tocar",category:"Verbo"},{word:"wash",trans:"lavar",category:"Verbo"},{word:"advantage",trans:"ventaja",category:"Sustantivo"},{word:"attack",trans:"ataque",category:"Sustantivo"},{word:"butter",trans:"mantequilla",category:"Sustantivo"},{word:"club",trans:"club",category:"Sustantivo"},{word:"college",trans:"universidad",category:"Sustantivo"},{word:"degree",trans:"licenciatura",category:"Sustantivo"},{word:"escape",trans:"escapar",category:"Verbo"},{word:"gate",trans:"portón",category:"Sustantivo"},{word:"independent",trans:"independiente",category:"Adjetivo"},{word:"listen",trans:"escuchar",category:"Verbo"},{word:"marry",trans:"casar",category:"Verbo"},{word:"object",trans:"objeto",category:"Sustantivo"},{word:"path",trans:"camino",category:"Sustantivo"},{word:"quiet",trans:"tranquilo",category:"Adjetivo"},{word:"refuse",trans:"rechazar",category:"Verbo"},{word:"subject",trans:"tema",category:"Sustantivo"},{word:"supply",trans:"suministro",category:"Sustantivo"},{word:"taste",trans:"gusto",category:"Sustantivo"},{word:"usually",trans:"generalmente",category:"Adverbio"},{word:"vegetable",trans:"vegetal",category:"Sustantivo"},{word:"arrange",trans:"organizar",category:"Verbo"},{word:"below",trans:"abajo",category:"Preposición"},{word:"cigarette",trans:"cigarrillo",category:"Sustantivo"},{word:"cottage",trans:"cabaña",category:"Sustantivo"},{word:"department",trans:"departamento",category:"Sustantivo"},{word:"earn",trans:"ganar",category:"Verbo"},{word:"front",trans:"frente",category:"Sustantivo"},{word:"gentle",trans:"amable",category:"Adjetivo"},{word:"hat",trans:"sombrero",category:"Sustantivo"},{word:"instrument",trans:"instrumento",category:"Sustantivo"},{word:"machine",trans:"máquina",category:"Sustantivo"},{word:"newspaper",trans:"periódico",category:"Sustantivo"},{word:"parcel",trans:"paquete",category:"Sustantivo"},{word:"religion",trans:"religión",category:"Sustantivo"},{word:"repair",trans:"reparar",category:"Verbo"},{word:"serve",trans:"servir",category:"Verbo"},{word:"shoulder",trans:"hombro",category:"Sustantivo"},{word:"trip",trans:"viaje",category:"Sustantivo"},{word:"village",trans:"pueblo",category:"Sustantivo"},{word:"wall",trans:"pared",category:"Sustantivo"},{word:"arrive",trans:"llegar",category:"Verbo"},{word:"born",trans:"nacido",category:"Adjetivo"},{word:"clothes",trans:"ropa",category:"Sustantivo"},{word:"correct",trans:"correcto",category:"Adjetivo"},{word:"double",trans:"doble",category:"Adjetivo"},{word:"english",trans:"inglés",category:"Sustantivo"},{word:"forget",trans:"olvidar",category:"Verbo"},{word:"goal",trans:"objetivo",category:"Sustantivo"},{word:"hate",trans:"odio",category:"Sustantivo"},{word:"kill",trans:"matar",category:"Verbo"},{word:"last",trans:"último",category:"Adjetivo"},{word:"main",trans:"principal",category:"Adjetivo"},{word:"pair",trans:"par",category:"Sustantivo"},{word:"promise",trans:"promesa",category:"Sustantivo"},{word:"regular",trans:"regular",category:"Adjetivo"},{word:"somewhere",trans:"algún lugar",category:"Adverbio"},{word:"space",trans:"espacio",category:"Sustantivo"},{word:"these",trans:"estas",category:"Pronombre"},{word:"useful",trans:"útil",category:"Adjetivo"},{word:"without",trans:"sin",category:"Preposición"},{word:"animal",trans:"animal",category:"Sustantivo"},{word:"beer",trans:"cerveza",category:"Sustantivo"},{word:"calm",trans:"calma",category:"Sustantivo"},{word:"copy",trans:"copiar",category:"Verbo"},{word:"dish",trans:"plato",category:"Sustantivo"},{word:"express",trans:"rápido",category:"Adjetivo"},{word:"foreign",trans:"extranjero",category:"Adjetivo"},{word:"guess",trans:"adivinar",category:"Verbo"},{word:"husband",trans:"marido",category:"Sustantivo"},{word:"lie",trans:"mentira",category:"Sustantivo"},{word:"mine",trans:"mía",category:"Pronombre"},{word:"opinion",trans:"opinión",category:"Sustantivo"},{word:"passenger",trans:"pasajero",category:"Sustantivo"},{word:"press",trans:"prensa",category:"Sustantivo"},{word:"rule",trans:"regla",category:"Sustantivo"},{word:"sign",trans:"firmar",category:"Verbo"},{word:"support",trans:"apoyo",category:"Sustantivo"},{word:"those",trans:"aquellos",category:"Pronombre"},{word:"wonderful",trans:"maravilloso",category:"Adjetivo"},{word:"year",trans:"año",category:"Sustantivo"},{word:"afraid",trans:"temeroso",category:"Adjetivo"},{word:"board",trans:"tablero",category:"Sustantivo"},{word:"circle",trans:"círculo",category:"Sustantivo"},{word:"count",trans:"contar",category:"Verbo"},{word:"death",trans:"muerte",category:"Sustantivo"},{word:"discover",trans:"descubrir",category:"Verbo"},{word:"funny",trans:"gracioso",category:"Adjetivo"},{word:"guest",trans:"invitado",category:"Sustantivo"},{word:"horse",trans:"caballo",category:"Sustantivo"},{word:"lake",trans:"lago",category:"Sustantivo"},{word:"modern",trans:"moderno",category:"Adjetivo"},{word:"necessary",trans:"necesario",category:"Adjetivo"},{word:"plenty",trans:"abundancia",category:"Sustantivo"},{word:"profit",trans:"lucro",category:"Sustantivo"},{word:"reduce",trans:"reducir",category:"Verbo"},{word:"share",trans:"compartir",category:"Verbo"},{word:"steal",trans:"robar",category:"Verbo"},{word:"trust",trans:"confiar",category:"Verbo"},{word:"wish",trans:"deseo",category:"Sustantivo"},{word:"young",trans:"joven",category:"Adjetivo"},{word:"admire",trans:"admirar",category:"Verbo"},{word:"allow",trans:"permitir",category:"Verbo"},{word:"battle",trans:"batalla",category:"Sustantivo"},{word:"climb",trans:"escalada",category:"Sustantivo"},{word:"complete",trans:"completar",category:"Verbo"},{word:"divide",trans:"dividir",category:"Verbo"},{word:"effort",trans:"esfuerzo",category:"Sustantivo"},{word:"fresh",trans:"fresco",category:"Adjetivo"},{word:"hole",trans:"agujero",category:"Sustantivo"},{word:"indeed",trans:"en efecto",category:"Adverbio"},{word:"marriage",trans:"matrimonio",category:"Sustantivo"},{word:"outside",trans:"afuera",category:"Preposición"},{word:"pleasant",trans:"agradable",category:"Adjetivo"},{word:"point",trans:"punto",category:"Sustantivo"},{word:"recent",trans:"reciente",category:"Adjetivo"},{word:"secretary",trans:"secretario",category:"Sustantivo"},{word:"sing",trans:"cantar",category:"Verbo"},{word:"soft",trans:"suave",category:"Adjetivo"},{word:"third",trans:"tercero",category:"Número"},{word:"various",trans:"varios",category:"Adjetivo"},{word:"adventure",trans:"aventura",category:"Sustantivo"},{word:"although",trans:"aunque",category:"Conjunción"},{word:"bottom",trans:"fondo",category:"Sustantivo"},{word:"coin",trans:"moneda",category:"Sustantivo"},{word:"comfort",trans:"comodidad",category:"Sustantivo"},{word:"drop",trans:"soltar",category:"Verbo"},{word:"equal",trans:"igual",category:"Adjetivo"},{word:"gun",trans:"pistola",category:"Sustantivo"},{word:"intelligent",trans:"inteligente",category:"Adjetivo"},{word:"join",trans:"unirse",category:"Verbo"},{word:"laugh",trans:"risa",category:"Sustantivo"},{word:"middle",trans:"medio",category:"Sustantivo"},{word:"perform",trans:"realizar",category:"Verbo"},{word:"plain",trans:"llanura",category:"Sustantivo"},{word:"soldier",trans:"soldado",category:"Sustantivo"},{word:"surface",trans:"superficie",category:"Sustantivo"},{word:"thick",trans:"grueso",category:"Adjetivo"},{word:"until",trans:"hasta",category:"Preposición"},{word:"wild",trans:"salvaje",category:"Adjetivo"},{word:"attempt",trans:"intento",category:"Sustantivo"},{word:"bill",trans:"cuenta",category:"Sustantivo"},{word:"breathe",trans:"respirar",category:"Verbo"},{word:"cook",trans:"cocinar",category:"Verbo"},{word:"defend",trans:"defender",category:"Verbo"},{word:"fat",trans:"grasa",category:"Sustantivo"},{word:"grey",trans:"gris",category:"Adjetivo"},{word:"hot",trans:"caliente",category:"Adjetivo"},{word:"character",trans:"personaje",category:"Sustantivo"},{word:"import",trans:"importar",category:"Verbo"},{word:"lose",trans:"perder",category:"Verbo"},{word:"mountain",trans:"montaña",category:"Sustantivo"},{word:"operation",trans:"operación",category:"Sustantivo"},{word:"prize",trans:"premio",category:"Sustantivo"},{word:"risk",trans:"riesgo",category:"Sustantivo"},{word:"safe",trans:"seguro",category:"Adjetivo"},{word:"row",trans:"fila",category:"Sustantivo"},{word:"suddenly",trans:"repentinamente",category:"Adverbio"},{word:"suit",trans:"traje",category:"Sustantivo"},{word:"type",trans:"tipo",category:"Sustantivo"},{word:"wood",trans:"madera",category:"Sustantivo"},{word:"area",trans:"área",category:"Sustantivo"},{word:"asleep",trans:"dormido",category:"Adjetivo"},{word:"bath",trans:"bañera",category:"Sustantivo"},{word:"careless",trans:"descuidado",category:"Adjetivo"},{word:"delay",trans:"retrasar",category:"Verbo"},{word:"event",trans:"evento",category:"Sustantivo"},{word:"foot",trans:"pie",category:"Sustantivo"},{word:"hide",trans:"esconder",category:"Verbo"},{word:"chain",trans:"cadena",category:"Sustantivo"},{word:"international",trans:"internacional",category:"Adjetivo"},{word:"match",trans:"partido",category:"Sustantivo"},{word:"nervous",trans:"nervioso",category:"Adjetivo"},{word:"pity",trans:"lástima",category:"Sustantivo"},{word:"prove",trans:"probar",category:"Verbo"},{word:"raise",trans:"aumento",category:"Sustantivo"},{word:"shut",trans:"cerrar",category:"Verbo"},{word:"smell",trans:"oler",category:"Verbo"},{word:"straight",trans:"derecho",category:"Adjetivo"},{word:"trade",trans:"comercio",category:"Sustantivo"},{word:"variety",trans:"variedad",category:"Sustantivo"},{word:"admit",trans:"admitir",category:"Verbo"},{word:"attend",trans:"asistir",category:"Verbo"},{word:"branch",trans:"rama",category:"Sustantivo"},{word:"coal",trans:"carbón",category:"Sustantivo"},{word:"consist",trans:"consistir",category:"Verbo"},{word:"declare",trans:"declarar",category:"Verbo"},{word:"exact",trans:"exacto",category:"Adjetivo"},{word:"farmer",trans:"granjero",category:"Sustantivo"},{word:"instead",trans:"en lugar",category:"Preposición"},{word:"jacket",trans:"chaqueta",category:"Sustantivo"},{word:"leg",trans:"pierna",category:"Sustantivo"},{word:"metal",trans:"metal",category:"Sustantivo"},{word:"opposite",trans:"opuesto",category:"Adjetivo"},{word:"pound",trans:"libra",category:"Sustantivo"},{word:"roll",trans:"rodar",category:"Verbo"},{word:"score",trans:"puntuación",category:"Sustantivo"},{word:"shoot",trans:"disparar",category:"Verbo"},{word:"speech",trans:"habla",category:"Sustantivo"},{word:"toilet",trans:"baño",category:"Sustantivo"},{word:"whose",trans:"cuyo",category:"Pronombre"},{word:"attitude",trans:"actitud",category:"Sustantivo"},{word:"brave",trans:"valiente",category:"Adjetivo"},{word:"contain",trans:"contiene",category:"Verbo"},{word:"doubt",trans:"duda",category:"Sustantivo"},{word:"experience",trans:"experiencia",category:"Sustantivo"},{word:"flat",trans:"plano",category:"Adjetivo"},{word:"guard",trans:"guardia",category:"Sustantivo"},{word:"heavy",trans:"pesado",category:"Adjetivo"},{word:"charge",trans:"cargar",category:"Verbo"},{word:"iron",trans:"hierro",category:"Sustantivo"},{word:"medicine",trans:"medicamento",category:"Sustantivo"},{word:"noise",trans:"ruido",category:"Sustantivo"},{word:"politics",trans:"política",category:"Sustantivo"},{word:"pour",trans:"verter",category:"Verbo"},{word:"rush",trans:"prisa",category:"Sustantivo"},{word:"smooth",trans:"suave",category:"Adjetivo"},{word:"spread",trans:"propagar",category:"Verbo"},{word:"suggest",trans:"sugerir",category:"Verbo"},{word:"trouble",trans:"problema",category:"Sustantivo"},{word:"west",trans:"oeste",category:"Sustantivo"},{word:"average",trans:"promedio",category:"Sustantivo"},{word:"belong",trans:"pertenecer",category:"Verbo"},{word:"certainly",trans:"ciertamente",category:"Adverbio"},{word:"crime",trans:"crimen",category:"Sustantivo"},{word:"duty",trans:"deber",category:"Sustantivo"},{word:"either",trans:"ya sea",category:"Conjunción"},{word:"fail",trans:"fallar",category:"Verbo"},{word:"health",trans:"salud",category:"Sustantivo"},{word:"influence",trans:"influencia",category:"Sustantivo"},{word:"leader",trans:"líder",category:"Sustantivo"},{word:"measure",trans:"medida",category:"Sustantivo"},{word:"offer",trans:"oferta",category:"Sustantivo"},{word:"pile",trans:"pila",category:"Sustantivo"},{word:"regard",trans:"considerar",category:"Verbo"},{word:"rough",trans:"áspero",category:"Adjetivo"},{word:"series",trans:"serie",category:"Sustantivo"},{word:"spoil",trans:"mimar",category:"Verbo"},{word:"spot",trans:"mancha",category:"Sustantivo"},{word:"thin",trans:"delgado",category:"Adjetivo"},{word:"vote",trans:"votar",category:"Verbo"}
         ];
 
-        // Estado de la aplicación
         let currentIndex = 0;
-        let correctCards = 0;
-        let reviewStats = {};
+        let correctCount = 0;
+        let totalStudied = 0;
+        let isFlipped = false;
+        let filteredCards = [...FLASHCARDS];
+        let categoryStats = {};
+        let progressHistory = [];
+        let progressChart = null;
 
-        // Inicializar
         function init() {
+            loadCategories();
             updateCard();
-            updateProgress();
-            updateStats();
+            document.getElementById('searchInput').addEventListener('input', handleSearch);
+            initializeChart();
+            updateCategoryStats();
         }
 
-        // Actualizar tarjeta visible
+        function loadCategories() {
+            const categories = [...new Set(FLASHCARDS.map(c => c.category))].sort();
+            const container = document.getElementById('categoryFilters');
+            container.innerHTML = '';
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = 'category-btn';
+                btn.textContent = cat;
+                btn.onclick = () => filterCategory(btn, cat);
+                container.appendChild(btn);
+            });
+        }
+
+        function filterCategory(btn, category) {
+            btn.classList.toggle('active');
+            const active = document.querySelectorAll('.category-btn.active');
+            if (active.length === 0) {
+                filteredCards = [...FLASHCARDS];
+            } else {
+                const selected = Array.from(active).map(b => b.textContent);
+                filteredCards = FLASHCARDS.filter(c => selected.includes(c.category));
+            }
+            currentIndex = 0;
+            updateCard();
+        }
+
+        function handleSearch(e) {
+            const query = e.target.value.toLowerCase();
+            if (query === '') {
+                filteredCards = [...FLASHCARDS];
+            } else {
+                filteredCards = FLASHCARDS.filter(c => c.word.includes(query) || c.trans.includes(query));
+            }
+            currentIndex = 0;
+            updateCard();
+        }
+
         function updateCard() {
-            const card = flashcards[currentIndex];
-            const cardElement = document.getElementById('card');
-            
-            // Limpiar clase de volteo
-            cardElement.classList.remove('flipped');
-            
-            // Actualizar contenido
+            if (filteredCards.length === 0) return;
+            const card = filteredCards[currentIndex];
             document.getElementById('cardCategory').textContent = card.category;
             document.getElementById('cardWord').textContent = card.word.toUpperCase();
-            document.getElementById('cardHint').innerHTML = card.hint.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            
-            document.getElementById('cardTranslation').textContent = card.translation;
-            document.getElementById('cardExample').textContent = `"${card.example}"`;
-            document.getElementById('cardPronunciation').textContent = `Pronunciación: ${card.pronunciation}`;
-            
+            document.getElementById('cardTranslation').textContent = card.trans;
+            isFlipped = false;
+            document.getElementById('cardFront').style.display = 'flex';
+            document.getElementById('cardBack').style.display = 'none';
+            updateProgressText();
             updateNavigation();
+            updateProgressBar();
         }
 
-        // Voltear tarjeta
-        document.getElementById('card').addEventListener('click', function() {
-            this.classList.toggle('flipped');
-        });
+        function flipCard() {
+            isFlipped = !isFlipped;
+            document.getElementById('cardFront').style.display = isFlipped ? 'none' : 'flex';
+            document.getElementById('cardBack').style.display = isFlipped ? 'flex' : 'none';
+        }
 
-        // Navegar tarjetas
+        function markCard(difficulty) {
+            if (difficulty === 'good' || difficulty === 'easy') correctCount++;
+            totalStudied++;
+            const card = filteredCards[currentIndex];
+            if (!categoryStats[card.category]) {
+                categoryStats[card.category] = { total: 0, correct: 0 };
+            }
+            categoryStats[card.category].total++;
+            if (difficulty === 'good' || difficulty === 'easy') {
+                categoryStats[card.category].correct++;
+            }
+            updateStats();
+            updateCategoryStats();
+            if (currentIndex < filteredCards.length - 1) {
+                currentIndex++;
+                updateCard();
+            } else {
+                showCompletion();
+            }
+        }
+
         function previousCard() {
             if (currentIndex > 0) {
                 currentIndex--;
@@ -1000,70 +818,157 @@
         }
 
         function nextCard() {
-            if (currentIndex < flashcards.length - 1) {
+            if (currentIndex < filteredCards.length - 1) {
                 currentIndex++;
                 updateCard();
             }
         }
 
-        // Marcar tarjeta
-        function markCard(difficulty) {
-            reviewStats[currentIndex] = difficulty;
-            
-            if (difficulty === 'good' || difficulty === 'easy') {
-                correctCards++;
-            }
-            
-            updateStats();
-            
-            if (currentIndex < flashcards.length - 1) {
-                nextCard();
-            } else {
-                showCompletionModal();
-            }
-        }
-
-        // Actualizar progreso
-        function updateProgress() {
-            const progress = ((currentIndex + 1) / flashcards.length) * 100;
-            document.getElementById('progressFill').style.width = progress + '%';
-            document.getElementById('progressText').textContent = `Tarjeta ${currentIndex + 1} de ${flashcards.length}`;
-        }
-
-        // Actualizar estadísticas
         function updateStats() {
-            const accuracy = flashcards.length > 0 ? Math.round((correctCards / flashcards.length) * 100) : 0;
-            document.getElementById('correctCount').textContent = correctCards;
+            const accuracy = totalStudied > 0 ? Math.round((correctCount / totalStudied) * 100) : 0;
+            document.getElementById('correctCount').textContent = correctCount;
             document.getElementById('accuracyPercent').textContent = accuracy + '%';
-            updateProgress();
+            document.getElementById('sessionCount').textContent = totalStudied;
+            document.getElementById('totalWords').textContent = totalStudied;
+            document.getElementById('correctWords').textContent = correctCount;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+            document.getElementById('masteryRate').textContent = Math.round((correctCount / FLASHCARDS.length) * 100) + '%';
+            progressHistory.push({time: new Date().getTime(), correct: correctCount, total: totalStudied});
+            updateChart();
         }
 
-        // Actualizar navegación
+        function updateCategoryStats() {
+            const container = document.getElementById('categoryStats');
+            container.innerHTML = '';
+            Object.entries(categoryStats).forEach(([cat, stats]) => {
+                const accuracy = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+                const row = document.createElement('div');
+                row.className = 'category-row';
+                row.innerHTML = `
+                    <span class="category-name">${cat}</span>
+                    <div class="category-stats">
+                        <span>Est: ${stats.total}</span>
+                        <span>Cor: ${stats.correct}</span>
+                        <span style="color:#667eea;font-weight:700">${accuracy}%</span>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function updateProgressText() {
+            document.getElementById('progressText').textContent = `${currentIndex + 1} de ${filteredCards.length}`;
+        }
+
+        function updateProgressBar() {
+            const percent = filteredCards.length > 0 ? ((currentIndex + 1) / filteredCards.length) * 100 : 0;
+            document.getElementById('progressFill').style.width = percent + '%';
+        }
+
         function updateNavigation() {
             document.getElementById('prevBtn').disabled = currentIndex === 0;
-            document.getElementById('nextBtn').disabled = currentIndex === flashcards.length - 1;
+            document.getElementById('nextBtn').disabled = currentIndex === filteredCards.length - 1;
         }
 
-        // Modal de finalización
-        function showCompletionModal() {
-            const accuracy = Math.round((correctCards / flashcards.length) * 100);
-            document.getElementById('modalCorrect').textContent = correctCards;
-            document.getElementById('modalAccuracy').textContent = accuracy + '%';
-            document.getElementById('completionModal').classList.add('active');
+        function setStudyMode() {
+            document.getElementById('studyMode').style.display = 'flex';
+            document.getElementById('listMode').style.display = 'none';
         }
 
-        // Reiniciar
-        function resetAll() {
+        function setListMode() {
+            document.getElementById('studyMode').style.display = 'none';
+            document.getElementById('listMode').style.display = 'block';
+            renderList();
+        }
+
+        function renderList() {
+            const container = document.getElementById('wordList');
+            container.innerHTML = '';
+            filteredCards.forEach((card, idx) => {
+                const item = document.createElement('div');
+                item.className = 'word-item';
+                item.innerHTML = `<div><div class="word-name">${card.word}</div><div class="word-trans">${card.trans}</div></div>`;
+                item.onclick = () => {
+                    currentIndex = idx;
+                    setStudyMode();
+                    updateCard();
+                };
+                container.appendChild(item);
+            });
+        }
+
+        function showCompletion() {
+            const accuracy = totalStudied > 0 ? Math.round((correctCount / totalStudied) * 100) : 0;
+            alert(`🎉 ¡Sesión completada!\n\n📚 Palabras: ${totalStudied}\n✅ Correctas: ${correctCount}\n🎯 Precisión: ${accuracy}%`);
+        }
+
+        function resetProgress() {
             currentIndex = 0;
-            correctCards = 0;
-            reviewStats = {};
-            document.getElementById('completionModal').classList.remove('active');
-            updateCard();
+            correctCount = 0;
+            totalStudied = 0;
+            isFlipped = false;
+            filteredCards = [...FLASHCARDS];
+            categoryStats = {};
+            progressHistory = [];
+            document.getElementById('searchInput').value = '';
+            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
             updateStats();
+            updateCard();
+            setStudyMode();
         }
 
-        // Iniciar aplicación
-        init();
+        function shuffleCards() {
+            for (let i = filteredCards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [filteredCards[i], filteredCards[j]] = [filteredCards[j], filteredCards[i]];
+            }
+            currentIndex = 0;
+            updateCard();
+            alert('✅ Tarjetas mezcladas en orden aleatorio');
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById(tab).classList.add('active');
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            if (tab === 'progress') setTimeout(() => updateChart(), 100);
+        }
+
+        function initializeChart() {
+            const ctx = document.getElementById('progressChart');
+            if (!ctx) return;
+            progressChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Inicio'],
+                    datasets: [{
+                        label: 'Progreso de Aprendizaje (%)',
+                        data: [0],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: true } },
+                    scales: { y: { beginAtZero: true, max: 100 } }
+                }
+            });
+        }
+
+        function updateChart() {
+            if (!progressChart || progressHistory.length === 0) return;
+            progressChart.data.labels = progressHistory.map((_, i) => `${i+1}`);
+            progressChart.data.datasets[0].data = progressHistory.map(h => Math.round((h.correct / h.total) * 100));
+            progressChart.update();
+        }
+
+        window.addEventListener('load', init);
     </script>
 </body>
 </html>
